@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bank Statement to QuickBooks Online: The CSV Format Explained (3- and 4-Column)</title>
+<meta name="description" content="Exactly how to format a bank statement CSV for QuickBooks Online upload: 3-column vs 4-column layouts, date formats, signs, common errors and how to avoid duplicate transactions.">
+<link rel="canonical" href="https://vektorflow-labs.github.io/ledgerproof/bank-statement-to-quickbooks-csv.html">
+<link rel="icon" href="icon.png"><link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-white text-slate-800 antialiased">
+<header class="border-b border-slate-100"><div class="max-w-3xl mx-auto px-4 h-14 flex items-center justify-between">
+<a href="index.html" class="flex items-center gap-2 font-bold"><img src="icon.png" alt="" class="w-7 h-7 rounded-md">LedgerProof</a>
+<a href="index.html#buy" class="text-sm font-semibold text-green-700">Get LedgerProof →</a></div></header>
+<main class="max-w-3xl mx-auto px-4 py-12">
+<p class="text-sm text-slate-500">Guide · 5 min read</p>
+<h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 mt-2 leading-tight">Bank statement to QuickBooks Online: the CSV format explained</h1>
+<p class="mt-5 text-lg text-slate-600">When a bank feed is missing transactions (older periods, a closed account, a bank QuickBooks can't connect to), you can upload them yourself. QuickBooks Online is picky about the file. Here's the format it accepts and the mistakes that make an upload fail.</p>
+
+<h2 class="text-2xl font-bold mt-10">Where to upload</h2>
+<p class="mt-3"><b>Transactions → Bank transactions → Upload transactions</b> (the menu names move around between QuickBooks versions; look for <i>Link account → Upload from file</i>). QuickBooks accepts <b>CSV</b>, <b>QFX</b>, <b>QBO</b> and <b>OFX</b>. CSV is the most common for data you converted yourself.</p>
+
+<h2 class="text-2xl font-bold mt-10">Option A: the 3-column layout (simplest)</h2>
+<pre class="mt-3 bg-slate-900 text-green-300 rounded-xl p-4 overflow-x-auto text-sm">Date,Description,Amount
+01/03/2026,STARBUCKS #2231,-6.45
+01/04/2026,CLIENT PAYMENT - ACME LLC,1312.30</pre>
+<ul class="list-disc pl-6 mt-3 space-y-1"><li><b>One signed Amount column</b>: money out negative, money in positive.</li><li>Use <b>one date format for the whole file</b>. QuickBooks asks you to confirm it (e.g. MM/dd/yyyy) during the upload.</li><li>No currency symbols or thousands separators in amounts (<code>1312.30</code>, not <code>$1,312.30</code>).</li></ul>
+
+<h2 class="text-2xl font-bold mt-10">Option B: the 4-column layout</h2>
+<pre class="mt-3 bg-slate-900 text-green-300 rounded-xl p-4 overflow-x-auto text-sm">Date,Description,Credit,Debit
+01/03/2026,STARBUCKS #2231,,6.45
+01/04/2026,CLIENT PAYMENT - ACME LLC,1312.30,</pre>
+<p class="mt-3">Separate money-in and money-out columns, both positive. During the upload you tell QuickBooks which column is which.</p>
+
+<h2 class="text-2xl font-bold mt-10">Errors that break the upload</h2>
+<ul class="list-disc pl-6 mt-3 space-y-2">
+<li><b>Extra rows</b>: titles, "Opening balance", "Total" or blank lines above or below the data. Keep one header row and the transactions only.</li>
+<li><b>Mixed date formats</b>: <code>1/3/26</code> next to <code>2026-01-04</code>. Convert them all to one format.</li>
+<li><b>Running balance column included</b>: harmless if you map it to "don't import", but easy to mis-map as the amount.</li>
+<li><b>Overlapping periods</b>: uploading Jan 1–31 and then Jan 15–Feb 15 creates duplicates that you then have to exclude one by one. De-duplicate before uploading.</li>
+<li><b>Credit card signs</b>: on card statements a purchase increases the balance. Make sure purchases end up as money out.</li>
+</ul>
+
+<h2 class="text-2xl font-bold mt-10">Before you upload: verify the numbers</h2>
+<p class="mt-3">QuickBooks will happily import a misread amount. Check that <code>opening balance + sum of amounts = closing balance</code> for each statement before uploading. Our <a class="underline" href="pdf-bank-statement-to-excel.html">PDF-to-Excel guide</a> has a one-line running-balance formula that pinpoints a bad row.</p>
+
+<h2 class="text-2xl font-bold mt-10">Doing this for many statements?</h2>
+<p class="mt-3"><b>LedgerProof</b> converts PDF statements on your own computer, verifies every row against the printed balances, removes overlaps between statements, and exports a QuickBooks-ready 3-column CSV (plus Xero CSV and OFX/QFX-style files). It costs $29 once, with no subscription.</p>
+<div class="mt-8 rounded-2xl border-2 border-green-600 p-6 text-center">
+<p class="font-bold text-lg">QuickBooks-ready files, verified to the cent</p>
+<a href="index.html" class="inline-block mt-4 rounded-xl bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-3">See LedgerProof</a></div>
+</main>
+<footer class="py-10 text-center text-sm text-slate-500">© VektorFlow Labs · LedgerProof</footer>
+</body></html>

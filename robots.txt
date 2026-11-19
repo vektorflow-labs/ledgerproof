@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://vektorflow-labs.github.io/ledgerproof/sitemap.xml

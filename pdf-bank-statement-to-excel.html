@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How to Convert a PDF Bank Statement to Excel (3 Free Ways) – and Prove It's Right</title>
+<meta name="description" content="Three free ways to turn a PDF bank statement into Excel (bank export, Excel Power Query, Tabula) plus a 1-minute running-balance formula that proves no row was misread.">
+<link rel="canonical" href="https://vektorflow-labs.github.io/ledgerproof/pdf-bank-statement-to-excel.html">
+<link rel="icon" href="icon.png"><link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-white text-slate-800 antialiased">
+<header class="border-b border-slate-100"><div class="max-w-3xl mx-auto px-4 h-14 flex items-center justify-between">
+<a href="index.html" class="flex items-center gap-2 font-bold"><img src="icon.png" alt="" class="w-7 h-7 rounded-md">LedgerProof</a>
+<a href="index.html#buy" class="text-sm font-semibold text-green-700">Get LedgerProof →</a></div></header>
+<main class="max-w-3xl mx-auto px-4 py-12 article">
+<p class="text-sm text-slate-500">Guide · 6 min read</p>
+<h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 mt-2 leading-tight">How to convert a PDF bank statement to Excel (3 free ways) and prove it's right</h1>
+<p class="mt-5 text-lg text-slate-600">Retyping a statement is slow. Copy-pasting a PDF table into Excel usually turns every row into one long cell. Here are three free methods that work, ranked by effort, plus the check most guides skip: a single formula that proves no transaction was dropped or misread.</p>
+
+<h2 class="text-2xl font-bold mt-10">Method 1: ask your bank for CSV (best when available)</h2>
+<p class="mt-3">Most online banking sites can export recent transactions as <b>CSV</b>, <b>Excel</b>, <b>OFX/QFX</b> or <b>QBO</b> under "Download", "Export" or "Statements". This is the most accurate source because nothing has to be read off a PDF. Two limits:</p>
+<ul class="list-disc pl-6 mt-3 space-y-1"><li>Many banks only export the last 90 days to 2 years, and not closed accounts.</li><li>If a client or a lender sends you PDFs, there's nothing to export.</li></ul>
+
+<h2 class="text-2xl font-bold mt-10">Method 2: Excel's built-in PDF import (Power Query)</h2>
+<p class="mt-3">Excel for Microsoft 365 on Windows can read tables straight out of a PDF:</p>
+<ol class="list-decimal pl-6 mt-3 space-y-1">
+<li>Open a blank workbook → <b>Data</b> tab → <b>Get Data</b> → <b>From File</b> → <b>From PDF</b>.</li>
+<li>Pick the statement. The Navigator lists every table and page it detected (<i>Table001</i>, <i>Page001</i>…).</li>
+<li>Select the transactions table, then click <b>Transform Data</b> to fix types: set the date column to <i>Date</i> (use <i>Using Locale</i> if your bank writes 31/01/2026), and amounts to <i>Decimal Number</i>.</li>
+<li>If the statement continues over several pages, you'll get one table per page. Use <b>Append Queries</b> to stack them.</li>
+<li><b>Close &amp; Load</b>.</li>
+</ol>
+<p class="mt-3"><b>Watch out for:</b> wrapped descriptions that become extra rows, "Balance brought forward" lines inside the table, and banks that print the date only once per day (the other rows of that day come in with a blank date, so fill them down with <i>Transform → Fill → Down</i>).</p>
+
+<h2 class="text-2xl font-bold mt-10">Method 3: Tabula (free, open source, any OS)</h2>
+<p class="mt-3">Tabula is a free desktop tool made for pulling tables out of text-based PDFs. Load the PDF, drag a box around the transaction table on each page (or use <i>Autodetect Tables</i>), preview it with the <i>Stream</i> method, and export to CSV. It works well on clean layouts and needs the same clean-up as Power Query.</p>
+<p class="mt-3 text-slate-600">None of these methods work on <b>scanned</b> statements (photos of paper). For those you need OCR. Run any OCR result through the check below, because OCR misreads digits.</p>
+
+<h2 class="text-2xl font-bold mt-10">The 1-minute check: prove every row is right</h2>
+<p class="mt-3">Your statement already contains the answer key: an opening balance, a closing balance and usually a running balance on each row. Put amounts as <b>signed</b> numbers (money out negative) in column C and the printed running balance in column D, starting at row 2, with the opening balance in <code>D1</code>. Then in <code>E2</code>:</p>
+<pre class="mt-3 bg-slate-900 text-green-300 rounded-xl p-4 overflow-x-auto text-sm">=IF(ROUND(D1 + C2 - D2, 2) = 0, "OK", "CHECK")</pre>
+<p class="mt-3">Fill it down. Every row should say <b>OK</b>. A <b>CHECK</b> means that row (or one just above it) was misread, dropped or duplicated. Finally confirm the totals:</p>
+<pre class="mt-3 bg-slate-900 text-green-300 rounded-xl p-4 overflow-x-auto text-sm">= opening_balance + SUM(C:C) - closing_balance     → should be 0.00</pre>
+<p class="mt-3">If the bank prints no running balance, the total check alone still catches most problems.</p>
+
+<h2 class="text-2xl font-bold mt-10">When to use a dedicated tool instead</h2>
+<p class="mt-3">The free routes are fine for a statement or two. They get painful with a year of statements, several banks, or client work where you can't upload data anywhere. That's why we built <b>LedgerProof</b>. You drop in any number of PDFs, it runs on your own computer, does the running-balance check above on every row automatically, and exports Excel, CSV, QuickBooks, Xero or OFX. It costs $29 once.</p>
+<div class="mt-8 rounded-2xl border-2 border-green-600 p-6 text-center">
+<p class="font-bold text-lg">Skip the clean-up and the formulas</p>
+<p class="text-slate-600 mt-1">Batch-convert statements locally, with every row verified against the bank's balances.</p>
+<a href="index.html" class="inline-block mt-4 rounded-xl bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-3">See LedgerProof</a></div>
+<p class="mt-10 text-sm text-slate-500">Also read: <a class="underline" href="bank-statement-to-quickbooks-csv.html">Bank statement to QuickBooks Online: the CSV format explained</a></p>
+</main>
+<footer class="py-10 text-center text-sm text-slate-500">© VektorFlow Labs · LedgerProof</footer>
+</body></html>
