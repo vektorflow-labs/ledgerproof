@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Import a PDF Bank Statement into Xero: The CSV Format That Works</title>
+<meta name="description" content="How to turn a PDF bank statement into a CSV Xero accepts: the statement import columns, date and sign rules, the errors that block an import, and how to avoid duplicate lines.">
+<link rel="canonical" href="https://vektorflow-labs.github.io/ledgerproof/bank-statement-to-xero-csv.html">
+<link rel="icon" href="icon.png"><link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-white text-slate-800 antialiased">
+<header class="border-b border-slate-100"><div class="max-w-3xl mx-auto px-4 h-14 flex items-center justify-between">
+<a href="index.html" class="flex items-center gap-2 font-bold"><img src="icon.png" alt="" class="w-7 h-7 rounded-md">LedgerProof</a>
+<a href="index.html#buy" class="text-sm font-semibold text-green-700">Get LedgerProof →</a></div></header>
+<main class="max-w-3xl mx-auto px-4 py-12">
+<p class="text-sm text-slate-500">Guide · 5 min read</p>
+<h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 mt-2 leading-tight">Import a PDF bank statement into Xero: the CSV format that works</h1>
+<p class="mt-5 text-lg text-slate-600">Bank feeds only go back so far, and some banks don't connect to Xero at all. For those periods you import a statement file by hand. Xero doesn't read PDFs, so the statement has to become a CSV first. This is the layout Xero expects and the mistakes that get an import rejected.</p>
+
+<h2 class="text-2xl font-bold mt-10">Where to import</h2>
+<p class="mt-3">Open the bank account in Xero and choose <b>Manage account → Import a statement</b>. Xero takes <b>CSV</b>, <b>OFX</b>, <b>QIF</b> and <b>QBO</b> files. With a CSV you map the columns on the next screen; with OFX or QIF there's nothing to map.</p>
+
+<h2 class="text-2xl font-bold mt-10">The columns</h2>
+<p class="mt-3">Xero's statement template uses these headers. Only the two starred ones are required:</p>
+<pre class="mt-3 bg-slate-900 text-green-300 rounded-xl p-4 overflow-x-auto text-sm">*Date,*Amount,Payee,Description,Reference,Check Number
+03/01/2026,-6.45,STARBUCKS #2231,STARBUCKS #2231 SEATTLE WA,,
+04/01/2026,1312.30,ACME LLC,CLIENT PAYMENT - ACME LLC,INV-1042,</pre>
+<ul class="list-disc pl-6 mt-3 space-y-1">
+<li><b>Amount is one signed column</b>: money out negative, money in positive.</li>
+<li><b>Dates follow your organisation's region.</b> A UK, Australian or New Zealand org reads <code>03/01/2026</code> as 3 January; a US org reads it as March 1. Check a few rows in the preview before you confirm.</li>
+<li><b>Payee</b> is what Xero shows during reconciliation and what bank rules match on, so a short, clean payee name pays off later.</li>
+<li>No currency symbols or thousands separators: <code>1312.30</code>, not <code>$1,312.30</code>.</li>
+</ul>
+
+<h2 class="text-2xl font-bold mt-10">Errors that block or spoil an import</h2>
+<ul class="list-disc pl-6 mt-3 space-y-2">
+<li><b>Opening balance and total rows</b> left in the file. Xero imports them as transactions. Keep only the header row and the transactions.</li>
+<li><b>Two date formats</b> in one file, often from pasting together statements from different banks.</li>
+<li><b>Debit and credit in separate columns.</b> Combine them into one signed amount before importing.</li>
+<li><b>Overlapping statements.</b> If January's statement ends on the 31st and February's starts on the 28th, remove the overlap before importing, or you'll be excluding duplicate lines during reconciliation.</li>
+<li><b>Credit card statements</b> where a purchase shows as a positive number. On a card account in Xero, purchases should be negative.</li>
+</ul>
+
+<h2 class="text-2xl font-bold mt-10">Check the numbers before Xero sees them</h2>
+<p class="mt-3">Once lines are in Xero, finding a misread amount means reconciling your way to the gap. It's faster to check the file first: <code>opening balance + sum of amounts = closing balance</code> for each statement. Our <a class="underline" href="pdf-bank-statement-to-excel.html">PDF-to-Excel guide</a> has a one-line formula that checks every row against the printed running balance.</p>
+
+<h2 class="text-2xl font-bold mt-10">A year of statements, or several clients?</h2>
+<p class="mt-3"><b>LedgerProof</b> reads PDF statements on your own computer, checks every row against the bank's printed balances, removes overlaps between the statements you convert together and saves a Xero-ready CSV in the layout above. It also writes OFX and QIF if you'd rather skip column mapping. It costs $29 once.</p>
+<div class="mt-8 rounded-2xl border-2 border-green-600 p-6 text-center">
+<p class="font-bold text-lg">Try it on two of your statements</p>
+<p class="text-slate-600 mt-1">The free Lite edition converts 2 statements at a time to Excel and CSV, with the same balance check. The Xero export is in the full version.</p>
+<a href="https://ivanmoralesb.gumroad.com/l/ledgerproof-lite" class="inline-block mt-4 rounded-xl bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-3">Download LedgerProof Lite</a>
+<p class="mt-3 text-sm text-slate-600">Or <a class="underline" href="index.html">get the full version</a> ($29 once).</p></div>
+<p class="mt-10 text-sm text-slate-500">Also read: <a class="underline" href="bank-statement-to-quickbooks-csv.html">QuickBooks Online CSV format explained</a> · <a class="underline" href="pdf-bank-statement-to-ofx-qif.html">PDF bank statement to OFX or QIF</a></p>
+</main>
+<footer class="py-10 text-center text-sm text-slate-500">© VektorFlow Labs · LedgerProof</footer>
+</body></html>
