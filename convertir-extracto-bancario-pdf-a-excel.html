@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cómo convertir un extracto bancario PDF a Excel (y comprobar que está bien)</title>
+<meta name="description" content="Tres formas gratis de pasar un extracto bancario en PDF a Excel, más una fórmula de un minuto que compara cada fila con el saldo impreso. Sirve para extractos de España, México, Argentina, Chile, Colombia y otros países.">
+<link rel="canonical" href="https://vektorflow-labs.github.io/ledgerproof/convertir-extracto-bancario-pdf-a-excel.html">
+<link rel="alternate" hreflang="en" href="https://vektorflow-labs.github.io/ledgerproof/pdf-bank-statement-to-excel.html">
+<link rel="alternate" hreflang="es" href="https://vektorflow-labs.github.io/ledgerproof/convertir-extracto-bancario-pdf-a-excel.html">
+<link rel="icon" href="icon.png"><link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-white text-slate-800 antialiased">
+<header class="border-b border-slate-100"><div class="max-w-3xl mx-auto px-4 h-14 flex items-center justify-between">
+<a href="index.html" class="flex items-center gap-2 font-bold"><img src="icon.png" alt="" class="w-7 h-7 rounded-md">LedgerProof</a>
+<a href="https://ivanmoralesb.gumroad.com/l/ledgerproof-lite" class="text-sm font-semibold text-green-700">Descarga gratis →</a></div></header>
+<main class="max-w-3xl mx-auto px-4 py-12">
+<p class="text-sm text-slate-500">Guía · 6 min de lectura</p>
+<h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 mt-2 leading-tight">Cómo convertir un extracto bancario PDF a Excel (y comprobar que quedó bien)</h1>
+<p class="mt-5 text-lg text-slate-600">Copiar y pegar una tabla de un PDF en Excel suele dejar cada fila en una sola celda, o mezcla las columnas. Estas son tres formas gratis que funcionan y, al final, la comprobación que casi nadie hace: una fórmula que demuestra que no se perdió ni se leyó mal ningún movimiento.</p>
+
+<h2 class="text-2xl font-bold mt-10">1. Pedirle el archivo al banco</h2>
+<p class="mt-3">Muchos bancos permiten descargar los movimientos en Excel, CSV u OFX desde la banca en línea, en la sección de movimientos o de extractos. Es la fuente más exacta, porque nada se lee de un PDF. El problema es que suelen dar solo los últimos meses, y no sirve si el extracto te lo mandó un cliente o es de una cuenta cerrada.</p>
+
+<h2 class="text-2xl font-bold mt-10">2. Excel lee PDFs (Power Query)</h2>
+<p class="mt-3">Excel de Microsoft 365 en Windows puede leer tablas de un PDF:</p>
+<ol class="list-decimal pl-6 mt-3 space-y-1">
+<li>En un libro nuevo: <b>Datos → Obtener datos → Desde un archivo → Desde PDF</b>.</li>
+<li>Elige el extracto. El navegador muestra cada tabla y página que detectó (<i>Table001</i>, <i>Page001</i>…).</li>
+<li>Selecciona la tabla de movimientos y pulsa <b>Transformar datos</b>. Pon la columna de fecha como <i>Fecha</i> (con <i>Usando configuración regional</i> si el banco escribe 31/01/2026) y los importes como <i>Número decimal</i>.</li>
+<li>Si el extracto ocupa varias páginas, vas a tener una tabla por página: únelas con <b>Anexar consultas</b>.</li>
+<li><b>Cerrar y cargar</b>.</li>
+</ol>
+<p class="mt-3"><b>Ojo con:</b> descripciones largas que se parten en dos filas, la línea de "Saldo anterior" dentro de la tabla, y bancos que imprimen la fecha una sola vez por día (las otras filas de ese día quedan sin fecha; se arregla con <i>Transformar → Rellenar → Hacia abajo</i>).</p>
+
+<h2 class="text-2xl font-bold mt-10">3. Tabula (gratis, cualquier sistema)</h2>
+<p class="mt-3">Tabula es un programa libre para sacar tablas de PDFs con texto. Cargas el PDF, marcas la tabla en cada página (o usas <i>Autodetect Tables</i>) y exportas a CSV. Funciona bien con diseños limpios y necesita la misma limpieza que Power Query.</p>
+<p class="mt-3 text-slate-600">Ninguno de estos métodos sirve para extractos <b>escaneados</b> (fotos de papel). Para eso hace falta OCR, y conviene pasar el resultado por la comprobación de abajo, porque el OCR confunde dígitos.</p>
+
+<h2 class="text-2xl font-bold mt-10">La comprobación de un minuto</h2>
+<p class="mt-3">El extracto ya trae la respuesta: un saldo inicial, un saldo final y, casi siempre, el saldo después de cada movimiento. Pon los importes <b>con signo</b> (los cargos en negativo) en la columna C y el saldo impreso en la columna D, desde la fila 2, con el saldo inicial en <code>D1</code>. En <code>E2</code>:</p>
+<pre class="mt-3 bg-slate-900 text-green-300 rounded-xl p-4 overflow-x-auto text-sm">=SI(REDONDEAR(D1+C2-D2;2)=0;"OK";"REVISAR")</pre>
+<p class="mt-3">Arrástrala hacia abajo. Todas las filas tienen que decir <b>OK</b>. Un <b>REVISAR</b> marca la fila (o la de arriba) que se leyó mal, se perdió o se duplicó. Si tu Excel usa coma como separador de argumentos, cambia los <code>;</code> por <code>,</code>. Para cerrar, comprueba el total:</p>
+<pre class="mt-3 bg-slate-900 text-green-300 rounded-xl p-4 overflow-x-auto text-sm">= saldo_inicial + SUMA(C:C) - saldo_final     → tiene que dar 0</pre>
+
+<h2 class="text-2xl font-bold mt-10">Si tienes muchos extractos</h2>
+<p class="mt-3">Los métodos gratis van bien para uno o dos extractos. Con un año entero, varios bancos o extractos de clientes que no puedes subir a ninguna web, se vuelve pesado. Para eso hicimos <b>LedgerProof</b>: un programa para Windows, Mac y Linux que convierte los PDFs en tu propia computadora y hace la comprobación de arriba en cada fila, solo.</p>
+<ul class="list-disc pl-6 mt-3 space-y-1">
+<li>Lee extractos en español: fechas como <code>31/01/2026</code> o <code>01/MAR/2026</code>, importes como <code>1.234,56</code> o <code>1,234.56</code>, y monedas sin decimales como el peso chileno (<code>12.500.000</code>).</li>
+<li>Reconoce "Saldo anterior", "Saldo inicial", "Saldo final" y "Saldo actual".</li>
+<li>Exporta a Excel y CSV (y en la versión completa, a QuickBooks, Xero, OFX y QIF).</li>
+<li>La interfaz del programa está en inglés; son pocos botones y la guía trae capturas paso a paso.</li>
+</ul>
+<p class="mt-3 text-sm text-slate-500">Lo probamos con extractos de ejemplo de formato español, mexicano y chileno. Cada banco tiene su diseño: pruébalo gratis con los tuyos antes de pagar.</p>
+<div class="mt-8 rounded-2xl border-2 border-green-600 p-6 text-center">
+<p class="font-bold text-lg">Pruébalo gratis con tus extractos</p>
+<p class="text-slate-600 mt-1">La edición Lite convierte 2 extractos por vez a Excel y CSV, con la misma comprobación de saldos.</p>
+<a href="https://ivanmoralesb.gumroad.com/l/ledgerproof-lite" class="inline-block mt-4 rounded-xl bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-3">Descargar LedgerProof Lite</a>
+<p class="mt-3 text-sm text-slate-600">Versión completa: USD 29, un solo pago. <a class="underline" href="index.html">Ver detalles (en inglés)</a></p></div>
+</main>
+<footer class="py-10 text-center text-sm text-slate-500">© VektorFlow Labs · LedgerProof</footer>
+</body></html>
