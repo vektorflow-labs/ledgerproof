@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Credit Card Statement PDF to Excel: Convert It and Check the Total</title>
+<meta name="description" content="How to convert a credit card statement PDF to Excel for free, fix the signs so purchases show as spending, and check the result against the statement's previous and new balance.">
+<link rel="canonical" href="https://vektorflow-labs.github.io/ledgerproof/credit-card-statement-pdf-to-excel.html">
+<link rel="icon" href="icon.png"><link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-white text-slate-800 antialiased">
+<header class="border-b border-slate-100"><div class="max-w-3xl mx-auto px-4 h-14 flex items-center justify-between">
+<a href="index.html" class="flex items-center gap-2 font-bold"><img src="icon.png" alt="" class="w-7 h-7 rounded-md">LedgerProof</a>
+<a href="index.html#buy" class="text-sm font-semibold text-green-700">Get LedgerProof →</a></div></header>
+<main class="max-w-3xl mx-auto px-4 py-12">
+<p class="text-sm text-slate-500">Guide · 5 min read</p>
+<h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 mt-2 leading-tight">Credit card statement PDF to Excel: convert it and check the total</h1>
+<p class="mt-5 text-lg text-slate-600">Card statements are harder to convert than bank statements. They often split purchases, payments and fees into separate sections, print the amounts without a minus sign, and rarely show a balance after each line. Here's how to get one into a clean spreadsheet and prove nothing went missing.</p>
+
+<h2 class="text-2xl font-bold mt-10">Before you start: download the CSV if you can</h2>
+<p class="mt-3">Most card issuers let you download recent activity as CSV or Excel from the online account, usually under "Activity", "Transactions" or "Statements". If the period you need is still available there, use that file. The PDF route is for older statements, closed cards, or statements someone sent you.</p>
+
+<h2 class="text-2xl font-bold mt-10">Getting the rows out of the PDF</h2>
+<ol class="list-decimal pl-6 mt-3 space-y-2">
+<li><b>Excel (Microsoft 365, Windows):</b> <i>Data → Get Data → From File → From PDF</i>. Pick the table that holds the transactions on each page and use <i>Append Queries</i> to stack them. Card statements often have one table for payments and another for purchases, so you may need to append both.</li>
+<li><b>Tabula</b> (free, Windows/Mac/Linux): draw a box around the transaction area on each page and export to CSV.</li>
+<li><b>Copy and paste</b> works for a single short statement if you then use <i>Data → Text to Columns</i>. Expect to fix the descriptions by hand.</li>
+</ol>
+<p class="mt-3">None of these read scanned paper statements. Those need OCR, and OCR mistakes in amounts are exactly what the check below catches.</p>
+
+<h2 class="text-2xl font-bold mt-10">Fix the signs</h2>
+<p class="mt-3">On a bank statement, money out is negative. On a card statement, a purchase is usually printed as a plain positive number because it increases what you owe, and payments or refunds appear with a minus sign or a "CR" after them. Decide which view you want before you go further:</p>
+<ul class="list-disc pl-6 mt-3 space-y-1">
+<li><b>"What I owe" view</b> (matches the statement): purchases, fees and interest positive; payments and refunds negative.</li>
+<li><b>"My spending" view</b> (what budgeting and accounting apps expect): purchases negative, payments positive. Multiply the amount column by −1: type <code>-1</code> in a spare cell, copy it, select the amounts and use <i>Paste Special → Multiply</i>.</li>
+</ul>
+<p class="mt-3">Turn "CR" amounts into numbers first. With the text in A2, <code>=IF(RIGHT(TRIM(A2),2)="CR",-VALUE(SUBSTITUTE(A2,"CR","")),VALUE(A2))</code> gives you a signed value in the "what I owe" view.</p>
+
+<h2 class="text-2xl font-bold mt-10">The check: previous balance to new balance</h2>
+<p class="mt-3">The summary box at the top of a card statement gives you everything you need. In the "what I owe" view, with your signed amounts in column C:</p>
+<pre class="mt-3 bg-slate-900 text-green-300 rounded-xl p-4 overflow-x-auto text-sm">= previous_balance + SUM(C:C) - new_balance     → should be 0.00</pre>
+<p class="mt-3">If it's not zero, compare section totals. Most statements print a subtotal for payments, purchases, fees and interest. Sum the same rows in your sheet with <code>SUMIF</code> on a category column, and the section that disagrees is where a row was dropped, doubled or misread. Common culprits:</p>
+<ul class="list-disc pl-6 mt-3 space-y-1">
+<li>Interest and fees printed in a separate box that the table extraction skipped.</li>
+<li>Foreign currency purchases where the original amount and the converted amount both landed in the amount column.</li>
+<li>A payment whose "CR" marker ended up in the description, so it was counted as a purchase.</li>
+<li>Rows split across a page break.</li>
+</ul>
+
+<h2 class="text-2xl font-bold mt-10">Dates</h2>
+<p class="mt-3">Card statements often show two dates per line, the transaction date and the posting date. Keep one (the posting date is what the issuer used to build the statement) and make sure Excel reads it as a date. Many card statements print dates without a year, like <code>03/14</code>. Add the year from the statement period, and watch out for a December statement that includes January rows, or the other way round.</p>
+
+<h2 class="text-2xl font-bold mt-10">Doing a year of statements?</h2>
+<p class="mt-3"><b>LedgerProof</b> converts PDF statements to Excel and CSV (and in the full version QuickBooks, Xero, OFX and QIF) on your own computer. It has a credit card option that flips the signs so purchases come out as money out, and it compares the result with the balances printed on the statement and flags the rows that don't add up. Card layouts vary more than bank layouts, so try the free version on your own statements first.</p>
+<div class="mt-8 rounded-2xl border-2 border-green-600 p-6 text-center">
+<p class="font-bold text-lg">Try it free first</p>
+<p class="text-slate-600 mt-1">The Lite edition converts 2 statements at a time to Excel and CSV, with the same balance check.</p>
+<a href="https://ivanmoralesb.gumroad.com/l/ledgerproof-lite" class="inline-block mt-4 rounded-xl bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-3">Download LedgerProof Lite</a>
+<p class="mt-3 text-sm text-slate-600">Or <a class="underline" href="index.html">get the full version</a> ($29 once).</p></div>
+<p class="mt-10 text-sm text-slate-500">Also read: <a class="underline" href="pdf-bank-statement-to-excel.html">PDF bank statement to Excel</a> · <a class="underline" href="bank-statement-to-quickbooks-csv.html">Bank statement to QuickBooks CSV</a></p>
+</main>
+<footer class="py-10 text-center text-sm text-slate-500">© VektorFlow Labs · LedgerProof</footer>
+</body></html>
