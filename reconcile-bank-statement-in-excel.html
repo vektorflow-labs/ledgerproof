@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How to Reconcile a Bank Statement in Excel (Step by Step)</title>
+<meta name="description" content="A practical way to reconcile a bank statement with your books in Excel: line up both lists, match amounts with COUNTIFS, list what's left over, and prove the adjusted balances agree.">
+<link rel="canonical" href="https://vektorflow-labs.github.io/ledgerproof/reconcile-bank-statement-in-excel.html">
+<link rel="icon" href="icon.png"><link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-white text-slate-800 antialiased">
+<header class="border-b border-slate-100"><div class="max-w-3xl mx-auto px-4 h-14 flex items-center justify-between">
+<a href="index.html" class="flex items-center gap-2 font-bold"><img src="icon.png" alt="" class="w-7 h-7 rounded-md">LedgerProof</a>
+<a href="index.html#buy" class="text-sm font-semibold text-green-700">Get LedgerProof →</a></div></header>
+<main class="max-w-3xl mx-auto px-4 py-12">
+<p class="text-sm text-slate-500">Guide · 6 min read</p>
+<h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 mt-2 leading-tight">How to reconcile a bank statement in Excel</h1>
+<p class="mt-5 text-lg text-slate-600">A bank reconciliation answers one question: does the cash in your books match the cash the bank says you have, and if it doesn't, which items explain the gap? You don't need accounting software for it. Two lists, a few formulas and one final check are enough.</p>
+
+<h2 class="text-2xl font-bold mt-10">What you need</h2>
+<ul class="list-disc pl-6 mt-3 space-y-1">
+<li><b>The bank side:</b> every transaction on the statement for the period, with date, description and a signed amount (money in positive, money out negative), plus the opening and closing balance printed on the statement.</li>
+<li><b>The book side:</b> the same period from your cash book, ledger or accounting export, also with signed amounts, plus your book balance at the end of the period.</li>
+</ul>
+<p class="mt-3">Put each list on its own sheet, called <code>Bank</code> and <code>Books</code>, with the same columns: A = Date, B = Description, C = Amount. If the bank side is still a PDF, convert it first (see <a class="underline" href="pdf-bank-statement-to-excel.html">PDF bank statement to Excel</a>).</p>
+
+<h2 class="text-2xl font-bold mt-10">Step 1: make sure the bank list is complete</h2>
+<p class="mt-3">Everything below assumes the bank sheet holds every row on the statement. If a row got lost when you copied or converted it, you'll spend an hour hunting a "difference" that's really a missing line. Check it first:</p>
+<pre class="mt-3 bg-slate-900 text-green-300 rounded-xl p-4 overflow-x-auto text-sm">= opening_balance + SUM(Bank!C:C) - closing_balance     → should be 0.00</pre>
+<p class="mt-3">If the statement prints a balance after each line, you can find the exact row that breaks: with balances in column D, put <code>=ROUND(D1+C2-D2,2)</code> in E2 and fill down. Any cell that isn't 0 is where a row was dropped, doubled or misread.</p>
+
+<h2 class="text-2xl font-bold mt-10">Step 2: match the two lists</h2>
+<p class="mt-3">The simplest matching key is the amount. On the <code>Bank</code> sheet, in D2:</p>
+<pre class="mt-3 bg-slate-900 text-green-300 rounded-xl p-4 overflow-x-auto text-sm">=COUNTIFS(Books!C:C, C2) &gt;= COUNTIFS(C$2:C2, C2)</pre>
+<p class="mt-3">This returns TRUE when the books contain at least as many entries of that amount as you've seen so far on the bank side, so two identical $50.00 payments need two $50.00 entries in the books. Put the mirror formula on the <code>Books</code> sheet:</p>
+<pre class="mt-3 bg-slate-900 text-green-300 rounded-xl p-4 overflow-x-auto text-sm">=COUNTIFS(Bank!C:C, C2) &gt;= COUNTIFS(C$2:C2, C2)</pre>
+<p class="mt-3">Filter both sheets on FALSE. What's left is the reconciliation work. If you have many repeated amounts (rent, subscriptions), match on amount and date instead by adding a helper column like <code>=C2&amp;"|"&amp;TEXT(A2,"yyyy-mm")</code> and counting that.</p>
+
+<h2 class="text-2xl font-bold mt-10">Step 3: sort the leftovers</h2>
+<p class="mt-3">Each unmatched line falls into one of a few buckets:</p>
+<ul class="list-disc pl-6 mt-3 space-y-1">
+<li><b>In the books, not yet on the statement:</b> checks you wrote that haven't cleared (outstanding checks) and deposits made at the end of the period (deposits in transit). These are timing differences and need no correction.</li>
+<li><b>On the statement, not in the books:</b> bank fees, interest, card charges, direct debits nobody recorded. These need a journal entry in your books.</li>
+<li><b>In both, but different amounts:</b> usually a typo, like 1,280 entered as 1,230. Fix the books.</li>
+<li><b>In both, but entered twice on one side:</b> duplicates. Delete the extra entry.</li>
+</ul>
+
+<h2 class="text-2xl font-bold mt-10">Step 4: prove it</h2>
+<p class="mt-3">Lay out the classic two-column reconciliation on a third sheet:</p>
+<pre class="mt-3 bg-slate-900 text-green-300 rounded-xl p-4 overflow-x-auto text-sm">Bank closing balance
+  + deposits in transit
+  - outstanding checks
+  = adjusted bank balance
+
+Book balance
+  + interest and credits not yet recorded
+  - fees and debits not yet recorded
+  +/- error corrections
+  = adjusted book balance
+
+adjusted bank balance - adjusted book balance  → should be 0.00</pre>
+<p class="mt-3">Use <code>SUMIFS</code> on a "Bucket" column you add to the leftovers, so the totals update when you reclassify a line. Wrap the final difference in <code>ROUND(...,2)</code>: floating point can leave a 0.0000001 that looks like a real difference.</p>
+
+<h2 class="text-2xl font-bold mt-10">When it still doesn't balance</h2>
+<ul class="list-disc pl-6 mt-3 space-y-1">
+<li><b>Difference divisible by 9:</b> often two digits swapped (54.10 entered as 45.10).</li>
+<li><b>Difference equal to twice an amount:</b> an item recorded with the wrong sign.</li>
+<li><b>Difference equal to an amount on the statement:</b> a row missing from one side. Re-run the Step 1 check.</li>
+<li><b>Last month's reconciliation:</b> if it didn't balance either, the gap may have been carried forward. Start from the last period that did.</li>
+</ul>
+
+<h2 class="text-2xl font-bold mt-10">Getting the bank side out of PDFs</h2>
+<p class="mt-3">Most of the time in a reconciliation goes into Step 1: getting a complete, correctly signed list out of the bank's PDF. <b>LedgerProof</b> does that part. It converts PDF statements to Excel and CSV on your own computer (the full version also exports QuickBooks, Xero, OFX and QIF) and checks every row against the balances printed on the statement, flagging any row that doesn't add up. It doesn't do the matching against your books; Steps 2 to 4 are still yours, but you start them from a bank list you know is complete.</p>
+<div class="mt-8 rounded-2xl border-2 border-green-600 p-6 text-center">
+<p class="font-bold text-lg">Try it free first</p>
+<p class="text-slate-600 mt-1">The Lite edition converts 2 statements at a time to Excel and CSV, with the same balance check.</p>
+<a href="https://ivanmoralesb.gumroad.com/l/ledgerproof-lite" class="inline-block mt-4 rounded-xl bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-3">Download LedgerProof Lite</a>
+<p class="mt-3 text-sm text-slate-600">Or <a class="underline" href="index.html">get the full version</a> ($29 once).</p></div>
+<p class="mt-10 text-sm text-slate-500">Also read: <a class="underline" href="pdf-bank-statement-to-excel.html">PDF bank statement to Excel</a> · <a class="underline" href="credit-card-statement-pdf-to-excel.html">Credit card statement PDF to Excel</a></p>
+</main>
+<footer class="py-10 text-center text-sm text-slate-500">© VektorFlow Labs · LedgerProof</footer>
+</body></html>
