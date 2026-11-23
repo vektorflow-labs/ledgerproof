@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Free CSV to OFX Converter (also QIF, QuickBooks and Xero CSV) | Runs in Your Browser</title>
+<meta name="description" content="Convert a bank CSV to OFX, QIF, QuickBooks Online CSV or Xero CSV for free. Runs in your browser, nothing is uploaded. Handles debit/credit columns, 1.234,56 amounts and checks each row against the balance column.">
+<link rel="canonical" href="https://vektorflow-labs.github.io/ledgerproof/csv-to-ofx-converter.html">
+<link rel="alternate" hreflang="en" href="https://vektorflow-labs.github.io/ledgerproof/csv-to-ofx-converter.html">
+<link rel="alternate" hreflang="es" href="https://vektorflow-labs.github.io/ledgerproof/convertir-csv-a-ofx-qif.html">
+<link rel="icon" href="icon.png"><link rel="stylesheet" href="styles.css">
+<script src="csv-converter.js" defer></script>
+</head>
+<body class="bg-white text-slate-800 antialiased">
+<header class="border-b border-slate-100"><div class="max-w-3xl mx-auto px-4 h-14 flex items-center justify-between">
+<a href="index.html" class="flex items-center gap-2 font-bold"><img src="icon.png" alt="" class="w-7 h-7 rounded-md">LedgerProof</a>
+<a href="index.html#buy" class="text-sm font-semibold text-green-700">Get LedgerProof →</a></div></header>
+<main class="max-w-3xl mx-auto px-4 py-12">
+<p class="text-sm text-slate-500">Free tool · nothing is uploaded</p>
+<h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 mt-2 leading-tight">Free CSV to OFX converter (and QIF, QuickBooks, Xero)</h1>
+<p class="mt-5 text-lg text-slate-600">Turn a bank's CSV export into a file your accounting or money app can import. The conversion happens in this page, on your computer: your transactions are never sent anywhere.</p>
+
+<section class="mt-8 rounded-2xl border border-slate-200 p-5 md:p-6 bg-slate-50">
+<p class="font-semibold">1. Your CSV</p>
+<div class="mt-3 flex flex-wrap items-center gap-3">
+<input id="lpc-file" type="file" accept=".csv,.txt,text/csv" class="text-sm">
+<a href="#" id="lpc-sample" class="text-sm underline text-slate-600">or try a sample</a></div>
+<textarea id="lpc-text" rows="6" class="mt-3 w-full rounded-lg border border-slate-300 p-3 font-mono text-xs" placeholder="...or paste the CSV here"></textarea>
+
+<div id="lpc-setup" class="hidden">
+<p class="font-semibold mt-6">2. Columns</p>
+<div class="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+<label class="flex items-center gap-2 sm:col-span-2"><input id="lpc-header" type="checkbox" checked> First row is a header</label>
+<label>Date<select id="lpc-date" class="mt-1 w-full rounded border border-slate-300 p-2 bg-white"></select></label>
+<label>Description<select id="lpc-desc" class="mt-1 w-full rounded border border-slate-300 p-2 bg-white"></select></label>
+<label>Add to description (optional)<select id="lpc-desc2" class="mt-1 w-full rounded border border-slate-300 p-2 bg-white"></select></label>
+<label>Amounts are in<select id="lpc-mode" class="mt-1 w-full rounded border border-slate-300 p-2 bg-white"><option value="single">one column (money out negative)</option><option value="split">two columns (debit and credit)</option></select></label>
+<label id="lpc-single">Amount<select id="lpc-amount" class="mt-1 w-full rounded border border-slate-300 p-2 bg-white"></select></label>
+<div id="lpc-split" class="hidden grid grid-cols-2 gap-3"><label>Debit (out)<select id="lpc-debit" class="mt-1 w-full rounded border border-slate-300 p-2 bg-white"></select></label><label>Credit (in)<select id="lpc-credit" class="mt-1 w-full rounded border border-slate-300 p-2 bg-white"></select></label></div>
+<label>Balance (optional, enables the check)<select id="lpc-balance" class="mt-1 w-full rounded border border-slate-300 p-2 bg-white"></select></label>
+<label>Date format<select id="lpc-datefmt" class="mt-1 w-full rounded border border-slate-300 p-2 bg-white"><option value="auto">Detect</option><option value="mdy">MM/DD/YYYY</option><option value="dmy">DD/MM/YYYY</option></select></label>
+<label>Number format<select id="lpc-numfmt" class="mt-1 w-full rounded border border-slate-300 p-2 bg-white"><option value="auto">Detect</option><option value="us">1,234.56</option><option value="eu">1.234,56</option></select></label>
+<label class="flex items-center gap-2"><input id="lpc-flip" type="checkbox"> Flip signs (credit card exports)</label>
+</div>
+<div id="lpc-status" class="mt-5 text-sm"></div>
+<div id="lpc-preview" class="mt-4 overflow-x-auto"></div>
+
+<p class="font-semibold mt-6">3. Download</p>
+<div class="mt-3 flex flex-wrap items-end gap-3 text-sm">
+<label>Format<select id="lpc-format" class="mt-1 block rounded border border-slate-300 p-2 bg-white"><option value="ofx">OFX (Quicken, QuickBooks Desktop, Xero, Wave, GnuCash, YNAB)</option><option value="qbo">QuickBooks Online CSV</option><option value="xero">Xero CSV</option><option value="qif">QIF</option></select></label>
+<label id="lpc-cur-wrap">Currency<input id="lpc-currency" value="USD" maxlength="3" class="mt-1 block w-20 rounded border border-slate-300 p-2"></label>
+<button id="lpc-download" class="rounded-xl bg-green-600 hover:bg-green-700 text-white font-semibold px-5 py-2.5 disabled:opacity-50">Convert and download</button>
+</div>
+<div id="lpc-after" class="hidden mt-5 rounded-xl bg-white border border-green-600 p-4 text-sm">Done. If your bank only gives you <b>PDF statements</b>, <a class="underline font-semibold" href="index.html">LedgerProof</a> converts those to Excel, CSV, OFX, QIF, QuickBooks and Xero on your computer and checks every row against the printed balances. <a class="underline" href="https://ivanmoralesb.gumroad.com/l/ledgerproof-lite">Free version</a>.</div>
+</div>
+</section>
+
+<h2 class="text-2xl font-bold mt-12">How to use it</h2>
+<ol class="list-decimal pl-6 mt-3 space-y-1">
+<li>Download your transactions as CSV from online banking (or export them from a spreadsheet).</li>
+<li>Choose the file. The tool detects the separator (comma, semicolon or tab), the header and the usual column names (Date, Description, Amount, Debit, Credit, Balance, and their Spanish equivalents).</li>
+<li>Check the preview. If the bank has separate money-in and money-out columns, pick "two columns".</li>
+<li>Pick the format and download.</li>
+</ol>
+
+<h2 class="text-2xl font-bold mt-10">The balance check</h2>
+<p class="mt-3">If your CSV has a balance column, select it. The tool then checks that each row's amount takes the previous balance to the new one, in either date order, and lists the rows where it doesn't. A row that fails usually means a missing line, a duplicate, or an amount with the wrong sign. It's worth fixing before you import, because accounting software will accept a wrong file without complaint.</p>
+
+<h2 class="text-2xl font-bold mt-10">Which format should I pick?</h2>
+<ul class="list-disc pl-6 mt-3 space-y-1">
+<li><b>OFX</b>: the most widely accepted. Quicken, QuickBooks Desktop, Xero, Wave, GnuCash, YNAB, Moneydance, Banktivity. Each transaction gets a stable ID, so re-importing the same rows doesn't create duplicates in most apps.</li>
+<li><b>QuickBooks Online CSV</b>: the 3-column layout (Date, Description, Amount, dates as MM/DD/YYYY). See <a class="underline" href="bank-statement-to-quickbooks-csv.html">the QuickBooks CSV format explained</a>.</li>
+<li><b>Xero CSV</b>: Xero's statement import template (dates as DD/MM/YYYY). See <a class="underline" href="bank-statement-to-xero-csv.html">the Xero CSV format</a>.</li>
+<li><b>QIF</b>: for older Quicken versions, MoneyWiz and apps that don't read OFX. More on both in <a class="underline" href="pdf-bank-statement-to-ofx-qif.html">OFX vs QIF</a>.</li>
+</ul>
+
+<h2 class="text-2xl font-bold mt-10">Is it safe?</h2>
+<p class="mt-3">The page reads the file with your browser and builds the download there. There's no server behind it: you can disconnect from the internet after the page loads and it still works.</p>
+
+<div class="mt-10 rounded-2xl border-2 border-green-600 p-6 text-center">
+<p class="font-bold text-lg">Only have PDF statements?</p>
+<p class="text-slate-600 mt-1">LedgerProof converts PDF bank statements to Excel, CSV, OFX, QIF, QuickBooks and Xero on your computer, and checks every row against the balances printed on the statement.</p>
+<a href="https://ivanmoralesb.gumroad.com/l/ledgerproof-lite" class="inline-block mt-4 rounded-xl bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-3">Download LedgerProof Lite (free)</a>
+<p class="mt-3 text-sm text-slate-600">Or <a class="underline" href="index.html">get the full version</a> ($29 once).</p></div>
+<p class="mt-10 text-sm text-slate-500">Also: <a class="underline" href="free-bank-reconciliation-template-excel.html">Free bank reconciliation template</a> · <a class="underline" href="pdf-bank-statement-to-excel.html">PDF bank statement to Excel</a> · <a class="underline" href="convertir-csv-a-ofx-qif.html" hreflang="es">En español</a></p>
+</main>
+<footer class="py-10 text-center text-sm text-slate-500">© VektorFlow Labs · LedgerProof</footer>
+</body></html>

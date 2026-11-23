@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Convertir CSV a OFX gratis (también QIF, QuickBooks y Xero) | En tu navegador</title>
+<meta name="description" content="Convierte el CSV de tu banco a OFX, QIF, CSV para QuickBooks Online o Xero, gratis y sin subir nada: funciona en tu navegador. Entiende cargo y abono, importes como 1.234,56 y comprueba cada fila contra el saldo.">
+<link rel="canonical" href="https://vektorflow-labs.github.io/ledgerproof/convertir-csv-a-ofx-qif.html">
+<link rel="alternate" hreflang="es" href="https://vektorflow-labs.github.io/ledgerproof/convertir-csv-a-ofx-qif.html">
+<link rel="alternate" hreflang="en" href="https://vektorflow-labs.github.io/ledgerproof/csv-to-ofx-converter.html">
+<link rel="icon" href="icon.png"><link rel="stylesheet" href="styles.css">
+<script src="csv-converter.js" defer></script>
+</head>
+<body class="bg-white text-slate-800 antialiased">
+<header class="border-b border-slate-100"><div class="max-w-3xl mx-auto px-4 h-14 flex items-center justify-between">
+<a href="index.html" class="flex items-center gap-2 font-bold"><img src="icon.png" alt="" class="w-7 h-7 rounded-md">LedgerProof</a>
+<a href="https://ivanmoralesb.gumroad.com/l/ledgerproof-lite" class="text-sm font-semibold text-green-700">Descarga gratis →</a></div></header>
+<main class="max-w-3xl mx-auto px-4 py-12">
+<p class="text-sm text-slate-500">Herramienta gratis · no se sube nada</p>
+<h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 mt-2 leading-tight">Convertir CSV a OFX gratis (y a QIF, QuickBooks y Xero)</h1>
+<p class="mt-5 text-lg text-slate-600">Pasa el CSV que descargas de tu banco a un archivo que tu programa de contabilidad o de finanzas pueda importar. La conversión se hace en esta página, en tu computadora: tus movimientos no se envían a ningún lado.</p>
+
+<section class="mt-8 rounded-2xl border border-slate-200 p-5 md:p-6 bg-slate-50">
+<p class="font-semibold">1. Tu CSV</p>
+<div class="mt-3 flex flex-wrap items-center gap-3">
+<input id="lpc-file" type="file" accept=".csv,.txt,text/csv" class="text-sm">
+<a href="#" id="lpc-sample" class="text-sm underline text-slate-600">o prueba con un ejemplo</a></div>
+<textarea id="lpc-text" rows="6" class="mt-3 w-full rounded-lg border border-slate-300 p-3 font-mono text-xs" placeholder="...o pega aquí el CSV"></textarea>
+
+<div id="lpc-setup" class="hidden">
+<p class="font-semibold mt-6">2. Columnas</p>
+<div class="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+<label class="flex items-center gap-2 sm:col-span-2"><input id="lpc-header" type="checkbox" checked> La primera fila es el encabezado</label>
+<label>Fecha<select id="lpc-date" class="mt-1 w-full rounded border border-slate-300 p-2 bg-white"></select></label>
+<label>Concepto<select id="lpc-desc" class="mt-1 w-full rounded border border-slate-300 p-2 bg-white"></select></label>
+<label>Añadir al concepto (opcional)<select id="lpc-desc2" class="mt-1 w-full rounded border border-slate-300 p-2 bg-white"></select></label>
+<label>Los importes están en<select id="lpc-mode" class="mt-1 w-full rounded border border-slate-300 p-2 bg-white"><option value="single">una columna (lo que sale en negativo)</option><option value="split">dos columnas (cargo y abono)</option></select></label>
+<label id="lpc-single">Importe<select id="lpc-amount" class="mt-1 w-full rounded border border-slate-300 p-2 bg-white"></select></label>
+<div id="lpc-split" class="hidden grid grid-cols-2 gap-3"><label>Cargo (sale)<select id="lpc-debit" class="mt-1 w-full rounded border border-slate-300 p-2 bg-white"></select></label><label>Abono (entra)<select id="lpc-credit" class="mt-1 w-full rounded border border-slate-300 p-2 bg-white"></select></label></div>
+<label>Saldo (opcional, activa el control)<select id="lpc-balance" class="mt-1 w-full rounded border border-slate-300 p-2 bg-white"></select></label>
+<label>Formato de fecha<select id="lpc-datefmt" class="mt-1 w-full rounded border border-slate-300 p-2 bg-white"><option value="auto">Detectar</option><option value="mdy">MM/DD/AAAA</option><option value="dmy">DD/MM/AAAA</option></select></label>
+<label>Formato de número<select id="lpc-numfmt" class="mt-1 w-full rounded border border-slate-300 p-2 bg-white"><option value="auto">Detectar</option><option value="us">1,234.56</option><option value="eu">1.234,56</option></select></label>
+<label class="flex items-center gap-2"><input id="lpc-flip" type="checkbox"> Invertir signos (exportaciones de tarjeta de crédito)</label>
+</div>
+<div id="lpc-status" class="mt-5 text-sm"></div>
+<div id="lpc-preview" class="mt-4 overflow-x-auto"></div>
+
+<p class="font-semibold mt-6">3. Descargar</p>
+<div class="mt-3 flex flex-wrap items-end gap-3 text-sm">
+<label>Formato<select id="lpc-format" class="mt-1 block rounded border border-slate-300 p-2 bg-white"><option value="ofx">OFX (Quicken, QuickBooks Desktop, Xero, Wave, GnuCash, YNAB)</option><option value="qbo">CSV para QuickBooks Online</option><option value="xero">CSV para Xero</option><option value="qif">QIF</option></select></label>
+<label id="lpc-cur-wrap">Moneda<input id="lpc-currency" value="EUR" maxlength="3" class="mt-1 block w-20 rounded border border-slate-300 p-2"></label>
+<button id="lpc-download" class="rounded-xl bg-green-600 hover:bg-green-700 text-white font-semibold px-5 py-2.5 disabled:opacity-50">Convertir y descargar</button>
+</div>
+<div id="lpc-after" class="hidden mt-5 rounded-xl bg-white border border-green-600 p-4 text-sm">Listo. Si tu banco solo te da <b>extractos en PDF</b>, <a class="underline font-semibold" href="conversor-extractos-bancarios-pdf-excel.html">LedgerProof</a> los convierte a Excel, CSV, OFX, QIF, QuickBooks y Xero en tu computadora y compara cada fila con los saldos impresos. <a class="underline" href="https://ivanmoralesb.gumroad.com/l/ledgerproof-lite">Versión gratis</a>.</div>
+</div>
+</section>
+
+<h2 class="text-2xl font-bold mt-12">Cómo se usa</h2>
+<ol class="list-decimal pl-6 mt-3 space-y-1">
+<li>Descarga tus movimientos en CSV desde la banca en línea (o expórtalos desde una hoja de cálculo).</li>
+<li>Elige el archivo. La herramienta detecta el separador (coma, punto y coma o tabulador), el encabezado y los nombres de columna habituales: Fecha, Concepto, Importe, Cargo, Abono, Saldo (y sus equivalentes en inglés).</li>
+<li>Revisa la vista previa. Si el banco separa lo que entra y lo que sale en dos columnas, elige "dos columnas".</li>
+<li>Elige el formato y descarga.</li>
+</ol>
+
+<h2 class="text-2xl font-bold mt-10">El control de saldos</h2>
+<p class="mt-3">Si tu CSV tiene columna de saldo, selecciónala. La herramienta comprueba que cada importe lleve del saldo anterior al nuevo, en cualquier orden de fechas, y te lista las filas que no cuadran. Una fila que falla suele ser un movimiento que falta, uno duplicado o un importe con el signo cambiado. Conviene arreglarlo antes de importar, porque los programas contables aceptan un archivo equivocado sin avisar.</p>
+
+<h2 class="text-2xl font-bold mt-10">¿Qué formato elijo?</h2>
+<ul class="list-disc pl-6 mt-3 space-y-1">
+<li><b>OFX</b>: el más aceptado. Quicken, QuickBooks Desktop, Xero, Wave, GnuCash, YNAB, Moneydance. Cada movimiento lleva un identificador estable, así que en la mayoría de los programas importar dos veces las mismas filas no crea duplicados.</li>
+<li><b>CSV para QuickBooks Online</b>: el formato de 3 columnas (Date, Description, Amount, con fechas MM/DD/AAAA).</li>
+<li><b>CSV para Xero</b>: la plantilla de importación de extractos de Xero (fechas DD/MM/AAAA).</li>
+<li><b>QIF</b>: para versiones antiguas de Quicken, MoneyWiz y programas que no leen OFX.</li>
+</ul>
+
+<h2 class="text-2xl font-bold mt-10">¿Es seguro?</h2>
+<p class="mt-3">La página lee el archivo con tu navegador y arma la descarga ahí mismo. No hay ningún servidor detrás: puedes desconectarte de internet después de abrir la página y sigue funcionando.</p>
+
+<div class="mt-10 rounded-2xl border-2 border-green-600 p-6 text-center">
+<p class="font-bold text-lg">¿Solo tienes extractos en PDF?</p>
+<p class="text-slate-600 mt-1">LedgerProof convierte extractos bancarios en PDF a Excel, CSV, OFX, QIF, QuickBooks y Xero en tu computadora, y compara cada fila con los saldos impresos en el extracto. La interfaz está en español.</p>
+<a href="https://ivanmoralesb.gumroad.com/l/ledgerproof-lite" class="inline-block mt-4 rounded-xl bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-3">Descargar LedgerProof Lite (gratis)</a>
+<p class="mt-3 text-sm text-slate-600">Versión completa: USD 29, un solo pago. <a class="underline" href="conversor-extractos-bancarios-pdf-excel.html">Ver detalles</a></p></div>
+<p class="mt-10 text-sm text-slate-500">También: <a class="underline" href="plantilla-conciliacion-bancaria-excel.html">Plantilla de conciliación bancaria</a> · <a class="underline" href="convertir-extracto-bancario-pdf-a-excel.html">Extracto bancario PDF a Excel</a> · <a class="underline" href="csv-to-ofx-converter.html" hreflang="en">In English</a></p>
+</main>
+<footer class="py-10 text-center text-sm text-slate-500">© VektorFlow Labs · LedgerProof</footer>
+</body></html>
