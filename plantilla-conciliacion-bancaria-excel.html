@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plantilla de conciliación bancaria en Excel gratis (con control de saldos)</title>
+<meta name="description" content="Descarga gratis una plantilla de conciliación bancaria en Excel: comprueba cada movimiento del extracto contra el saldo impreso y concilia el banco con tu contabilidad. Sin registro. Funciona en Excel, LibreOffice y Google Sheets.">
+<link rel="canonical" href="https://vektorflow-labs.github.io/ledgerproof/plantilla-conciliacion-bancaria-excel.html">
+<link rel="alternate" hreflang="es" href="https://vektorflow-labs.github.io/ledgerproof/plantilla-conciliacion-bancaria-excel.html">
+<link rel="alternate" hreflang="en" href="https://vektorflow-labs.github.io/ledgerproof/free-bank-reconciliation-template-excel.html">
+<link rel="icon" href="icon.png"><link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-white text-slate-800 antialiased">
+<header class="border-b border-slate-100"><div class="max-w-3xl mx-auto px-4 h-14 flex items-center justify-between">
+<a href="index.html" class="flex items-center gap-2 font-bold"><img src="icon.png" alt="" class="w-7 h-7 rounded-md">LedgerProof</a>
+<a href="https://ivanmoralesb.gumroad.com/l/ledgerproof-lite" class="text-sm font-semibold text-green-700">Descarga gratis →</a></div></header>
+<main class="max-w-3xl mx-auto px-4 py-12">
+<p class="text-sm text-slate-500">Plantilla gratis · Excel, LibreOffice, Google Sheets</p>
+<h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 mt-2 leading-tight">Plantilla de conciliación bancaria en Excel, gratis</h1>
+<p class="mt-5 text-lg text-slate-600">Un archivo .xlsx con dos funciones. Primero comprueba que los movimientos que copiaste del extracto estén completos y bien leídos, fila por fila, contra el saldo que imprimió el banco. Después concilia ese extracto con tu contabilidad. Sin registro, sin macros y sin pedirte el correo.</p>
+<div class="mt-8 rounded-2xl bg-slate-50 border border-slate-200 p-6 text-center">
+<a href="plantilla-conciliacion-bancaria.xlsx" download class="inline-block rounded-xl bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-3">Descargar la plantilla (.xlsx, 25 KB)</a>
+<p class="mt-3 text-sm text-slate-500">Tres hojas: Comprobar extracto, Conciliación bancaria y Cómo usarla. Admite 500 movimientos.</p></div>
+
+<h2 class="text-2xl font-bold mt-10">Hoja 1: Comprobar extracto</h2>
+<p class="mt-3">Muchos descuadres empiezan antes de conciliar: un movimiento que se perdió al copiarlo del PDF, un 6 que se leyó como 8, una fila pegada dos veces. Esta hoja los detecta.</p>
+<ol class="list-decimal pl-6 mt-3 space-y-1">
+<li>Borra las filas de ejemplo y pega tus movimientos desde la fila 6: fecha, concepto, importe y el saldo impreso al lado de cada movimiento.</li>
+<li>Los importes van con signo: lo que entra en positivo y lo que sale en negativo. Si tu extracto tiene columnas de cargo y abono separadas, pon <code>=abono-cargo</code> en la columna del importe.</li>
+<li>Escribe el saldo inicial en B3 y el saldo final en B4.</li>
+</ol>
+<p class="mt-3">La columna E lleva el saldo calculado y la F lo compara con el impreso. Todas las filas tienen que decir <b>OK</b>. La primera que dice <b>REVISAR</b> es donde está el problema: ese importe se leyó mal, o falta o sobra un movimiento justo arriba. Las filas siguientes también se ponen en rojo porque el error se arrastra; al corregir la primera, vuelven a OK. La celda E3 tiene que dar 0: eso prueba que la suma de los importes coincide con la diferencia entre el saldo inicial y el final.</p>
+
+<h2 class="text-2xl font-bold mt-10">Hoja 2: Conciliación bancaria</h2>
+<p class="mt-3">La conciliación de siempre, con dos lados. El saldo del banco se toma solo de la hoja 1. Tú completas:</p>
+<ul class="list-disc pl-6 mt-3 space-y-1">
+<li><b>Depósitos en tránsito:</b> cobros que registraste y que el banco todavía no muestra.</li>
+<li><b>Cheques o pagos pendientes:</b> pagos que registraste y que todavía no se debitaron.</li>
+<li><b>El saldo de tu contabilidad</b>, más los intereses que abonó el banco y las comisiones que cobró y que aún no registraste.</li>
+</ul>
+<p class="mt-3">La diferencia de abajo se pone en verde cuando da 0. Si no da 0, casi siempre es una de tres cosas: un movimiento registrado con otro importe en uno de los lados, una comisión que nadie contabilizó, o un pago anotado en otro mes.</p>
+
+<h2 class="text-2xl font-bold mt-10">¿Por qué comprobar contra el saldo impreso?</h2>
+<p class="mt-3">Los totales pueden esconder errores. Si una fila se leyó con 9 de más y otra con 9 de menos, el total sigue cuadrando. El saldo de cada línea no lo deja pasar: la primera fila mal leída corta la cadena. Casi todos los bancos imprimen ese saldo, así que es un control gratis de tu carga de datos.</p>
+
+<h2 class="text-2xl font-bold mt-10">Cómo sacar los movimientos del PDF</h2>
+<p class="mt-3">Copiar a mano un extracto en PDF es la parte lenta. Hay tres formas gratis en <a class="underline" href="convertir-extracto-bancario-pdf-a-excel.html">cómo convertir un extracto bancario PDF a Excel</a>. Si tienes muchos extractos, <b>LedgerProof</b> los convierte a Excel y CSV en tu propia computadora y hace esta misma comprobación de saldos en cada fila, solo. Entiende importes como <code>1.234,56</code>, fechas como <code>31/01/2026</code> y la interfaz está en español.</p>
+<div class="mt-8 rounded-2xl border-2 border-green-600 p-6 text-center">
+<p class="font-bold text-lg">Pruébalo gratis con tus extractos</p>
+<p class="text-slate-600 mt-1">La edición Lite convierte 2 extractos por vez a Excel y CSV, con la misma comprobación de saldos.</p>
+<a href="https://ivanmoralesb.gumroad.com/l/ledgerproof-lite" class="inline-block mt-4 rounded-xl bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-3">Descargar LedgerProof Lite</a>
+<p class="mt-3 text-sm text-slate-600">Versión completa: USD 29, un solo pago. <a class="underline" href="conversor-extractos-bancarios-pdf-excel.html">Ver detalles</a></p></div>
+<p class="mt-10 text-sm text-slate-500">También: <a class="underline" href="convertir-extracto-bancario-pdf-a-excel.html">Extracto bancario PDF a Excel</a> · <a class="underline" href="free-bank-reconciliation-template-excel.html" hreflang="en">In English</a></p>
+</main>
+<footer class="py-10 text-center text-sm text-slate-500">© VektorFlow Labs · LedgerProof</footer>
+</body></html>

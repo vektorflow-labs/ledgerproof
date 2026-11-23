@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Free Bank Reconciliation Template for Excel (with Balance Check)</title>
+<meta name="description" content="Free Excel bank reconciliation template: checks every statement row against the printed running balance, then reconciles the statement with your books. No sign-up, works in Excel, LibreOffice and Google Sheets.">
+<link rel="canonical" href="https://vektorflow-labs.github.io/ledgerproof/free-bank-reconciliation-template-excel.html">
+<link rel="alternate" hreflang="en" href="https://vektorflow-labs.github.io/ledgerproof/free-bank-reconciliation-template-excel.html">
+<link rel="alternate" hreflang="es" href="https://vektorflow-labs.github.io/ledgerproof/plantilla-conciliacion-bancaria-excel.html">
+<link rel="icon" href="icon.png"><link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-white text-slate-800 antialiased">
+<header class="border-b border-slate-100"><div class="max-w-3xl mx-auto px-4 h-14 flex items-center justify-between">
+<a href="index.html" class="flex items-center gap-2 font-bold"><img src="icon.png" alt="" class="w-7 h-7 rounded-md">LedgerProof</a>
+<a href="index.html#buy" class="text-sm font-semibold text-green-700">Get LedgerProof →</a></div></header>
+<main class="max-w-3xl mx-auto px-4 py-12">
+<p class="text-sm text-slate-500">Free template · Excel, LibreOffice, Google Sheets</p>
+<h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 mt-2 leading-tight">Free bank reconciliation template for Excel</h1>
+<p class="mt-5 text-lg text-slate-600">A plain .xlsx file with two jobs. First it checks that the transactions you copied from a bank statement are complete and correctly read, row by row, against the balance the bank printed. Then it reconciles that statement with your own books. No sign-up, no macros, no email address.</p>
+<div class="mt-8 rounded-2xl bg-slate-50 border border-slate-200 p-6 text-center">
+<a href="bank-reconciliation-template.xlsx" download class="inline-block rounded-xl bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-3">Download the template (.xlsx, 25 KB)</a>
+<p class="mt-3 text-sm text-slate-500">Three sheets: Statement check, Bank reconciliation, How to use. Covers 500 transactions.</p></div>
+
+<h2 class="text-2xl font-bold mt-10">Sheet 1: Statement check</h2>
+<p class="mt-3">Most reconciliation problems start before the reconciliation: a transaction lost while copying from a PDF, a 6 read as an 8, a row pasted twice. This sheet catches those.</p>
+<ol class="list-decimal pl-6 mt-3 space-y-1">
+<li>Delete the example rows and paste your transactions from row 6: date, description, amount, and the balance printed next to each transaction.</li>
+<li>Amounts go with a sign: money in positive, money out negative. If your statement has separate debit and credit columns, put <code>=credit-debit</code> in the amount column.</li>
+<li>Type the opening balance in B3 and the closing balance in B4.</li>
+</ol>
+<p class="mt-3">Column E keeps a running balance and column F compares it with the printed one. Every row should say <b>OK</b>. The first row that says <b>CHECK</b> is where the problem is: that amount was misread, or a transaction is missing or duplicated just above it. The rows after it also turn red because the error carries forward; fix the first one and they go back to OK. Cell E3 must show 0, which proves the total of your amounts matches the gap between the opening and closing balances.</p>
+
+<h2 class="text-2xl font-bold mt-10">Sheet 2: Bank reconciliation</h2>
+<p class="mt-3">The classic two-sided reconciliation. The bank balance comes from sheet 1 automatically. You fill in:</p>
+<ul class="list-disc pl-6 mt-3 space-y-1">
+<li><b>Deposits in transit:</b> money you recorded that the bank hasn't shown yet.</li>
+<li><b>Outstanding cheques or payments:</b> payments you recorded that haven't cleared.</li>
+<li><b>Your book balance</b>, plus interest the bank added and fees it charged that aren't in your books yet.</li>
+</ul>
+<p class="mt-3">The difference at the bottom turns green at 0. If it doesn't, the gap is usually one of three things: a transaction recorded with the wrong amount on one side, a bank fee nobody booked, or a payment recorded in the wrong month. For a method to find which, see <a class="underline" href="reconcile-bank-statement-in-excel.html">how to reconcile a bank statement in Excel</a>, which matches the two lists with COUNTIFS.</p>
+
+<h2 class="text-2xl font-bold mt-10">Why check against the printed balance?</h2>
+<p class="mt-3">Totals can hide errors. If one row is misread by +9 and another by -9, the total still matches. The running balance on each line doesn't let that through: the first wrong row breaks the chain. Banks print that balance on almost every statement, so it's a free audit of your data entry.</p>
+
+<h2 class="text-2xl font-bold mt-10">Getting the transactions out of the PDF</h2>
+<p class="mt-3">Copying a PDF statement into this sheet by hand is the slow part. <b>LedgerProof</b> converts PDF bank statements to Excel and CSV on your own computer and runs this same running-balance check on every row by itself, so the list you paste here is already verified. The full version also exports QuickBooks, Xero, OFX and QIF.</p>
+<div class="mt-8 rounded-2xl border-2 border-green-600 p-6 text-center">
+<p class="font-bold text-lg">Try it free first</p>
+<p class="text-slate-600 mt-1">The Lite edition converts 2 statements at a time to Excel and CSV, with the same balance check.</p>
+<a href="https://ivanmoralesb.gumroad.com/l/ledgerproof-lite" class="inline-block mt-4 rounded-xl bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-3">Download LedgerProof Lite</a>
+<p class="mt-3 text-sm text-slate-600">Or <a class="underline" href="index.html">get the full version</a> ($29 once).</p></div>
+<p class="mt-10 text-sm text-slate-500">Also read: <a class="underline" href="pdf-bank-statement-to-excel.html">PDF bank statement to Excel</a> · <a class="underline" href="reconcile-bank-statement-in-excel.html">Reconcile a bank statement in Excel</a> · <a class="underline" href="plantilla-conciliacion-bancaria-excel.html" hreflang="es">En español</a></p>
+</main>
+<footer class="py-10 text-center text-sm text-slate-500">© VektorFlow Labs · LedgerProof</footer>
+</body></html>
