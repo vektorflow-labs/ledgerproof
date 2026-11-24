@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Resumen de gastos por categoría desde tu extracto bancario en Excel</title>
+<meta name="description" content="Cómo pasar los movimientos de un extracto bancario a un resumen mensual por categoría en Excel: columna de categoría con BUSCARX o reglas, totales con SUMAR.SI.CONJUNTO, tabla dinámica por mes y una comprobación de que no falta nada.">
+<link rel="canonical" href="https://vektorflow-labs.github.io/ledgerproof/resumen-gastos-por-categoria-extracto-bancario-excel.html">
+<link rel="icon" href="icon.png"><link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-white text-slate-800 antialiased">
+<header class="border-b border-slate-100"><div class="max-w-3xl mx-auto px-4 h-14 flex items-center justify-between">
+<a href="index.html" class="flex items-center gap-2 font-bold"><img src="icon.png" alt="" class="w-7 h-7 rounded-md">LedgerProof</a>
+<a href="https://vektorflow-labs.github.io/ledgerproof/descargar.html" class="text-sm font-semibold text-green-700">Descarga gratis →</a></div></header>
+<main class="max-w-3xl mx-auto px-4 py-12">
+<p class="text-sm text-slate-500">Guía · 6 min de lectura</p>
+<h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 mt-2 leading-tight">Resumen de gastos por categoría desde tu extracto bancario en Excel</h1>
+<p class="mt-5 text-lg text-slate-600">El extracto te dice qué pasó en la cuenta, fila por fila. Lo que casi siempre quieres saber es otra cosa: cuánto se fue en alquiler, en proveedores, en comisiones o en impuestos cada mes. Esta guía arma ese resumen en Excel con fórmulas normales, sin macros, y termina con un control para que el total por categorías coincida con el banco.</p>
+
+<h2 class="text-2xl font-bold mt-10">1. Parte de una tabla limpia</h2>
+<p class="mt-3">Necesitas los movimientos en una hoja con cuatro columnas: <b>Fecha</b> (A), <b>Descripción</b> (B), <b>Importe</b> con signo (C, los cargos en negativo) y <b>Saldo</b> (D). Si tu banco te da cargos y abonos en columnas separadas, junta todo en una: <code>=abono-cargo</code>.</p>
+<p class="mt-3">Antes de clasificar nada, comprueba que la tabla está completa. Con el saldo inicial en <code>D1</code>, en <code>E2</code>:</p>
+<pre class="mt-3 bg-slate-900 text-green-300 rounded-xl p-4 overflow-x-auto text-sm">=SI(REDONDEAR(D1+C2-D2;2)=0;"OK";"REVISAR")</pre>
+<p class="mt-3">Si alguna fila dice REVISAR, arréglala primero. Un resumen por categoría hecho sobre una tabla con una fila perdida da totales que parecen razonables y están mal. Si todavía no tienes el extracto en Excel, mira <a class="underline" href="convertir-extracto-bancario-pdf-a-excel.html">cómo convertir un extracto bancario PDF a Excel</a>.</p>
+<p class="mt-3">Convierte el rango en tabla (<b>Insertar → Tabla</b>) y llámala <code>Movs</code>. Así las fórmulas se extienden solas cuando agregas meses.</p>
+
+<h2 class="text-2xl font-bold mt-10">2. Agrega una columna de mes</h2>
+<p class="mt-3">En una columna nueva llamada <b>Mes</b>:</p>
+<pre class="mt-3 bg-slate-900 text-green-300 rounded-xl p-4 overflow-x-auto text-sm">=TEXTO([@Fecha];"aaaa-mm")</pre>
+<p class="mt-3">El formato <code>2026-03</code> ordena bien alfabéticamente, cosa que no pasa con "marzo". Si la fórmula devuelve el mismo texto que la fecha, la columna Fecha quedó como texto: conviértela con <b>Datos → Texto en columnas</b>, eligiendo el orden DMA.</p>
+
+<h2 class="text-2xl font-bold mt-10">3. Clasifica con una tabla de reglas</h2>
+<p class="mt-3">Escribir la categoría a mano en cada fila funciona el primer mes y se abandona el segundo. Mejor una hoja aparte, <b>Reglas</b>, con dos columnas: una palabra que aparece en la descripción y la categoría que le toca.</p>
+<div class="overflow-x-auto mt-3"><table class="text-sm border border-slate-200">
+<tr class="bg-slate-50"><th class="px-3 py-1 text-left">Contiene</th><th class="px-3 py-1 text-left">Categoría</th></tr>
+<tr><td class="px-3 py-1">ALQUILER</td><td class="px-3 py-1">Alquiler</td></tr>
+<tr><td class="px-3 py-1">COMISION</td><td class="px-3 py-1">Comisiones bancarias</td></tr>
+<tr><td class="px-3 py-1">LUZ</td><td class="px-3 py-1">Servicios</td></tr>
+<tr><td class="px-3 py-1">NOMINA</td><td class="px-3 py-1">Sueldos</td></tr>
+<tr><td class="px-3 py-1">TRANSF RECIBIDA</td><td class="px-3 py-1">Cobros</td></tr>
+</table></div>
+<p class="mt-3">Usa la palabra tal como la imprime tu banco, en mayúsculas o no da igual. Convierte esa hoja en tabla con el nombre <code>Reglas</code>. En la tabla de movimientos, columna <b>Categoría</b> (Excel 365 o 2021):</p>
+<pre class="mt-3 bg-slate-900 text-green-300 rounded-xl p-4 overflow-x-auto text-sm">=SI.ERROR(INDICE(Reglas[Categoría];COINCIDIR(VERDADERO;ESNUMERO(HALLAR(Reglas[Contiene];[@Descripción]));0));"Sin clasificar")</pre>
+<p class="mt-3"><code>HALLAR</code> busca cada palabra de la lista dentro de la descripción y la fórmula devuelve la categoría de la primera que aparece. El orden de las reglas importa: pon arriba las más específicas ("COMISION TRANSF" antes que "TRANSF"). En versiones viejas de Excel hay que confirmarla con Ctrl+Mayús+Intro.</p>
+<p class="mt-3">Filtra por "Sin clasificar", agrega reglas para lo que se repite y deja el resto como "Varios". En pocos meses la lista cubre casi todo y el trabajo mensual baja a revisar un puñado de filas.</p>
+
+<h2 class="text-2xl font-bold mt-10">4. El resumen: categorías por mes</h2>
+<p class="mt-3">En una hoja <b>Resumen</b>, pon las categorías en la columna A (desde A2) y los meses en la fila 1 (desde B1, como texto: <code>2026-01</code>, <code>2026-02</code>…). En <code>B2</code>:</p>
+<pre class="mt-3 bg-slate-900 text-green-300 rounded-xl p-4 overflow-x-auto text-sm">=SUMAR.SI.CONJUNTO(Movs[Importe];Movs[Categoría];$A2;Movs[Mes];B$1)</pre>
+<p class="mt-3">Arrástrala a toda la cuadrícula. Los gastos salen negativos y los cobros positivos, que es lo que quieres para ver el resultado neto de cada mes. Si prefieres ver gastos en positivo, envuelve la fórmula en <code>-( … )</code> solo en las filas de gastos.</p>
+<p class="mt-3">La alternativa rápida es una <b>tabla dinámica</b>: <b>Insertar → Tabla dinámica</b> sobre <code>Movs</code>, Categoría en filas, Mes en columnas, Importe en valores. Se actualiza con clic derecho → Actualizar. Las fórmulas son más cómodas si vas a armar un informe con formato fijo; la tabla dinámica, si quieres explorar.</p>
+
+<h2 class="text-2xl font-bold mt-10">5. El control que cierra todo</h2>
+<p class="mt-3">Debajo de cada mes, suma la columna del resumen. Ese total tiene que ser igual a la variación del saldo del banco en ese mes:</p>
+<pre class="mt-3 bg-slate-900 text-green-300 rounded-xl p-4 overflow-x-auto text-sm">= SUMA(B2:B20) - (saldo_final_del_mes - saldo_inicial_del_mes)     → tiene que dar 0</pre>
+<p class="mt-3">Si no da cero, hay movimientos con la fecha mal leída (cayeron en otro mes), una categoría que falta en la columna A del resumen o filas que no están en la tabla. Una fila "Sin clasificar" en el resumen ayuda a que nada se escape.</p>
+
+<h2 class="text-2xl font-bold mt-10">Errores comunes</h2>
+<ul class="list-disc pl-6 mt-3 space-y-1">
+<li><b>Importes como texto.</b> Si <code>1.234,56</code> quedó alineado a la izquierda, Excel no lo suma. Usa <b>Datos → Texto en columnas</b> y en <i>Avanzadas</i> indica el separador decimal correcto.</li>
+<li><b>Transferencias entre tus propias cuentas.</b> No son gasto ni ingreso. Dales su propia categoría ("Traspasos") para que no inflen el resumen.</li>
+<li><b>Varios extractos que se solapan.</b> Si juntas dos PDFs que comparten unos días, esos movimientos aparecen dos veces. El control del paso 5 lo detecta, porque el total deja de coincidir con el saldo.</li>
+</ul>
+
+<h2 class="text-2xl font-bold mt-10">Si los extractos vienen en PDF</h2>
+<p class="mt-3">Todo esto supone que ya tienes los movimientos en Excel y que están completos. Ahí es donde se va el tiempo cuando el banco o el cliente solo te da PDFs. Para eso hicimos <b>LedgerProof</b>, un programa para Windows, Mac y Linux que convierte extractos bancarios en PDF a Excel o CSV en tu propia computadora y compara cada fila con el saldo impreso, así que el paso 1 ya viene hecho. Junta varios extractos a la vez y quita los movimientos repetidos cuando se solapan. La clasificación por categorías la haces tú en Excel con esta guía; el programa no categoriza.</p>
+<p class="mt-3 text-sm text-slate-500">Cada banco tiene su diseño: pruébalo gratis con tus extractos antes de pagar.</p>
+<div class="mt-8 rounded-2xl border-2 border-green-600 p-6 text-center">
+<p class="font-bold text-lg">Pruébalo gratis con tus extractos</p>
+<p class="text-slate-600 mt-1">La edición Lite convierte 2 extractos por vez a Excel y CSV, con la misma comprobación de saldos.</p>
+<a href="https://vektorflow-labs.github.io/ledgerproof/descargar.html" class="inline-block mt-4 rounded-xl bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-3">Descargar LedgerProof Lite</a>
+<p class="mt-3 text-sm text-slate-600">Versión completa: USD 29, un solo pago. <a class="underline" href="conversor-extractos-bancarios-pdf-excel.html">Ver detalles</a></p></div>
+<p class="mt-10 text-sm text-slate-500">También: <a class="underline" href="plantilla-conciliacion-bancaria-excel.html">Plantilla de conciliación bancaria en Excel (gratis)</a> · <a class="underline" href="convertir-extracto-bancario-pdf-a-excel.html">Convertir un extracto bancario PDF a Excel</a></p>
+</main>
+<footer class="py-10 text-center text-sm text-slate-500">© VektorFlow Labs · LedgerProof</footer>
+</body></html>
