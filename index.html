@@ -16,10 +16,15 @@
 <link rel="icon" href="icon.png">
 <link rel="stylesheet" href="styles.css">
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"SoftwareApplication","name":"LedgerProof","operatingSystem":"Windows, macOS, Linux",
- "applicationCategory":"FinanceApplication","offers":{"@type":"Offer","price":"29","priceCurrency":"USD"},
- "publisher":{"@type":"Organization","name":"VektorFlow Labs"}}
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"LedgerProof","url":"https://vektorflow-labs.github.io/ledgerproof/",
+ "description":"Converts PDF bank statements to Excel, CSV, QuickBooks Online CSV, Xero CSV, OFX and QIF on your own computer and checks every row against the balances printed on the statement.",
+ "operatingSystem":"Windows, macOS, Linux","applicationCategory":"FinanceApplication","softwareVersion":"1.1.0","inLanguage":["en","es"],
+ "image":"https://vektorflow-labs.github.io/ledgerproof/app_results_wide.png","screenshot":"https://vektorflow-labs.github.io/ledgerproof/app_results_wide.png","downloadUrl":"https://vektorflow-labs.github.io/ledgerproof/download.html",
+ "offers":[{"@type":"Offer","name":"LedgerProof","price":"29","priceCurrency":"USD","url":"https://ivanmoralesb.gumroad.com/l/ledgerproof"},
+           {"@type":"Offer","name":"LedgerProof Lite","price":"0","priceCurrency":"USD","url":"https://vektorflow-labs.github.io/ledgerproof/download.html"}],
+ "publisher":{"@type":"Organization","name":"VektorFlow Labs","url":"https://vektorflow-labs.github.io/ledgerproof/"}}
 </script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Will it work with my bank?", "acceptedAnswer": {"@type": "Answer", "text": "LedgerProof doesn't use per-bank templates. It finds the date and money columns from their positions, then picks the interpretation where your running balances add up. It's stress-tested on 400+ generated statement layouts (US, UK, EU and AU styles, debit/credit or signed columns, CR/DR markers, newest-first lists, wrapped descriptions, multi-page). If one of your statements doesn't convert, you get a refund within 30 days."}}, {"@type": "Question", "name": "What about scanned or photographed statements?", "acceptedAnswer": {"@type": "Answer", "text": "Statements downloaded from online banking are converted offline with no AI. For scans, turn on the optional AI reader with your own free Google Gemini key (1 minute to create) or a local Ollama model. Its output goes through the same balance check."}}, {"@type": "Question", "name": "Is my data uploaded anywhere?", "acceptedAnswer": {"@type": "Answer", "text": "No. LedgerProof runs on your computer and works offline after installation. It sends no usage statistics. Only if you choose the Gemini AI reader are those specific files sent to Google under your own key."}}, {"@type": "Question", "name": "Do I need to be technical?", "acceptedAnswer": {"@type": "Answer", "text": "No. Double-click the installer, then the desktop icon. LedgerProof opens in your browser like a website. A visual quickstart guide is included."}}, {"@type": "Question", "name": "Can I use it for my clients?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Use it on the computers you work on for any number of clients. Just don't resell or redistribute the software itself."}}, {"@type": "Question", "name": "Credit card statements?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Tick \"Credit card statement\" so purchases export as money out."}}]}</script>
 </head>
 <body class="bg-white text-slate-800 antialiased">
 
@@ -44,10 +49,10 @@
   <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight text-slate-900 leading-tight">PDF bank statements to Excel.<br class="hidden md:block"> <span class="text-green-600">Proven correct.</span></h1>
   <p class="mt-6 text-lg md:text-xl text-slate-600 max-w-3xl mx-auto">Drop a year of statements from any mix of banks. Get one clean spreadsheet in seconds, plus a report that shows every running balance adds up to the cent. It runs on your computer. Pay once.</p>
   <div class="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
-    <a href="https://ivanmoralesb.gumroad.com/l/ledgerproof" class="rounded-xl bg-green-600 hover:bg-green-700 text-white font-semibold px-7 py-4 text-lg shadow-lg shadow-green-600/20">Get LedgerProof – $29 one-time</a>
-    <a href="https://vektorflow-labs.github.io/ledgerproof/download.html" class="rounded-xl border border-slate-300 hover:border-slate-400 font-semibold px-7 py-4 text-lg">Try the free Lite edition</a>
+    <a href="https://vektorflow-labs.github.io/ledgerproof/download.html" class="rounded-xl bg-green-600 hover:bg-green-700 text-white font-semibold px-7 py-4 text-lg shadow-lg shadow-green-600/20">Download the free version</a>
+    <a href="https://ivanmoralesb.gumroad.com/l/ledgerproof" class="rounded-xl border border-slate-300 hover:border-slate-400 font-semibold px-7 py-4 text-lg">Full version: $29 once</a>
   </div>
-  <p class="mt-4 text-sm text-slate-500">Windows · Mac · Linux &nbsp;·&nbsp; No subscription &nbsp;·&nbsp; Free Lite edition to try first &nbsp;·&nbsp; 30-day refund</p>
+  <p class="mt-4 text-sm text-slate-500">No sign-up, no email &nbsp;·&nbsp; Windows · Mac · Linux &nbsp;·&nbsp; No subscription &nbsp;·&nbsp; 30-day refund</p>
   <div class="mt-12 rounded-2xl border border-slate-200 shadow-2xl shadow-slate-900/10 overflow-hidden">
     <img src="app_results_wide.png" alt="LedgerProof showing five statements from five banks, all verified" class="w-full" width="1440" height="900">
   </div>
@@ -63,6 +68,20 @@
 </section>
 
 <!-- HOW -->
+<!-- DEMO -->
+<section class="max-w-5xl mx-auto px-4 py-16">
+  <div class="grid md:grid-cols-2 gap-10 items-center">
+    <div class="mx-auto w-64 md:w-72 rounded-3xl overflow-hidden border border-slate-200 shadow-2xl shadow-slate-900/10 bg-slate-900">
+      <video src="demo-en.mp4" poster="demo-en.jpg" autoplay muted loop playsinline preload="metadata" width="540" height="960" class="w-full h-auto block" aria-label="See it in 30 seconds"></video>
+    </div>
+    <div>
+      <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900">See it in 30 seconds</h2>
+      <ul class="mt-6 space-y-3 text-slate-700 text-lg"><li class="flex gap-3"><span class="text-green-600 font-bold">✓</span><span>Drop in PDF statements from any mix of banks.</span></li><li class="flex gap-3"><span class="text-green-600 font-bold">✓</span><span>Every row is checked against the running balance the bank printed.</span></li><li class="flex gap-3"><span class="text-green-600 font-bold">✓</span><span>Rows that don't add up are flagged, so nothing wrong slips into your books.</span></li></ul>
+      <a href="https://vektorflow-labs.github.io/ledgerproof/download.html" class="inline-block mt-8 rounded-xl bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-3">Try it free</a>
+    </div>
+  </div>
+</section>
+
 <section id="how" class="max-w-6xl mx-auto px-4 py-20">
   <h2 class="text-3xl md:text-4xl font-extrabold text-center text-slate-900">Three steps. No setup skills needed.</h2>
   <div class="mt-12 grid md:grid-cols-3 gap-8">
@@ -153,7 +172,7 @@
 </main>
 
 <footer class="py-10 text-center text-sm text-slate-500">
-  <p class="mb-2"><a class="underline" href="pdf-bank-statement-to-excel.html">Guide: PDF bank statement to Excel</a> · <a class="underline" href="csv-to-ofx-converter.html">Free CSV to OFX converter</a> · <a class="underline" href="convertir-csv-a-ofx-qif.html" hreflang="es">Convertir CSV a OFX</a> · <a class="underline" href="free-bank-reconciliation-template-excel.html">Free bank reconciliation template (Excel)</a> · <a class="underline" href="plantilla-conciliacion-bancaria-excel.html" hreflang="es">Plantilla de conciliación bancaria</a> · <a class="underline" href="bank-statement-to-quickbooks-csv.html">QuickBooks CSV format</a> · <a class="underline" href="ledgerproof-vs-docuclipper.html">LedgerProof vs DocuClipper</a> · <a class="underline" href="offline-bank-statement-converters.html">Offline converters compared</a> · <a class="underline" href="bank-statement-to-xero-csv.html">Xero import</a> · <a class="underline" href="pdf-bank-statement-to-ofx-qif.html">PDF to OFX/QIF</a> · <a class="underline" href="credit-card-statement-pdf-to-excel.html">Credit card statements</a> · <a class="underline" href="reconcile-bank-statement-in-excel.html">Reconcile in Excel</a> · <a class="underline" href="convertir-extracto-bancario-pdf-a-excel.html" hreflang="es">Guía en español</a> · <a class="underline" href="conversor-extractos-bancarios-pdf-excel.html" hreflang="es">LedgerProof en español</a></p><p>© VektorFlow Labs · LedgerProof · Questions? Reply to your Gumroad receipt or message us on Gumroad.</p>
+  <p class="mb-2"><a class="underline" href="pdf-bank-statement-to-excel.html">Guide: PDF bank statement to Excel</a> · <a class="underline" href="csv-to-ofx-converter.html">Free CSV to OFX converter</a> · <a class="underline" href="convertir-csv-a-ofx-qif.html" hreflang="es">Convertir CSV a OFX</a> · <a class="underline" href="free-bank-reconciliation-template-excel.html">Free bank reconciliation template (Excel)</a> · <a class="underline" href="plantilla-conciliacion-bancaria-excel.html" hreflang="es">Plantilla de conciliación bancaria</a> · <a class="underline" href="bank-statement-to-quickbooks-csv.html">QuickBooks CSV format</a> · <a class="underline" href="ledgerproof-vs-docuclipper.html">LedgerProof vs DocuClipper</a> · <a class="underline" href="offline-bank-statement-converters.html">Offline converters compared</a> · <a class="underline" href="bank-statement-to-xero-csv.html">Xero import</a> · <a class="underline" href="pdf-bank-statement-to-ofx-qif.html">PDF to OFX/QIF</a> · <a class="underline" href="credit-card-statement-pdf-to-excel.html">Credit card statements</a> · <a class="underline" href="reconcile-bank-statement-in-excel.html">Reconcile in Excel</a> · <a class="underline" href="convertir-extracto-bancario-pdf-a-excel.html" hreflang="es">Guía en español</a> · <a class="underline" href="resumen-gastos-por-categoria-extracto-bancario-excel.html" hreflang="es">Gastos por categoría en Excel</a> · <a class="underline" href="conversor-extractos-bancarios-pdf-excel.html" hreflang="es">LedgerProof en español</a></p><p>© VektorFlow Labs · LedgerProof · Questions? Reply to your Gumroad receipt or message us on Gumroad.</p>
 </footer>
 <script src="https://gumroad.com/js/gumroad.js" defer></script>
 </body>
