@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Convertir Norma 43 a Excel gratis (Cuaderno 43 a Excel, CSV u OFX) | Con control de saldos</title>
+<meta name="description" content="Convierte un fichero Norma 43 (Cuaderno 43 de la AEB) a Excel, CSV, OFX, QIF, QuickBooks o Xero gratis y sin subir nada. Comprueba el fichero contra sus propios totales y saldo final, y calcula el saldo fila a fila.">
+<link rel="canonical" href="https://vektorflow-labs.github.io/ledgerproof/convertir-norma-43-a-excel.html">
+<link rel="alternate" hreflang="es" href="https://vektorflow-labs.github.io/ledgerproof/convertir-norma-43-a-excel.html">
+<link rel="alternate" hreflang="en" href="https://vektorflow-labs.github.io/ledgerproof/norma-43-to-excel-converter.html">
+<link rel="icon" href="icon.png"><link rel="stylesheet" href="styles.css">
+<script src="ofx-converter.js" defer></script>
+<script src="norma43.js" defer></script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿Qué es la Norma 43?", "acceptedAnswer": {"@type": "Answer", "text": "Es el formato estándar de la Asociación Española de Banca (Cuaderno 43) para que los bancos entreguen los movimientos de una cuenta en un fichero. Lo ofrecen muchos bancos en España, sobre todo en la banca de empresas, y lo leen muchos programas de contabilidad."}}, {"@type": "Question", "name": "¿Se sube mi fichero a algún servidor?", "acceptedAnswer": {"@type": "Answer", "text": "No. La página lee el fichero con tu navegador y arma la descarga ahí mismo. No hay servidor detrás: puedes desconectarte de internet después de abrirla y sigue funcionando."}}, {"@type": "Question", "name": "¿Qué extensión tiene el fichero?", "acceptedAnswer": {"@type": "Answer", "text": "Depende del banco: suele ser .n43 o .txt, pero el contenido es el mismo. La página no mira la extensión, mira que la primera línea empiece por 11."}}, {"@type": "Question", "name": "El control sale en rojo. ¿Qué hago?", "acceptedAnswer": {"@type": "Answer", "text": "Vuelve a descargar el fichero del banco para el mismo período y pruébalo otra vez. Si sigue sin cuadrar, compara el número de movimientos con lo que ves en la banca en línea: suele faltar un día entero o haber un período repetido."}}, {"@type": "Question", "name": "Mi banco me da el extracto en PDF, no en Norma 43. ¿Qué hago?", "acceptedAnswer": {"@type": "Answer", "text": "Para eso está LedgerProof: lee extractos bancarios y de tarjeta en PDF en tu ordenador, los exporta a Excel, CSV, OFX, QIF, QuickBooks y Xero, y compara cada fila con los saldos impresos. Entiende importes como 1.234,56 y la interfaz está en español. La versión Lite es gratis y convierte 2 extractos por vez."}}]}</script>
+</head>
+<body class="bg-white text-slate-800 antialiased">
+<header class="border-b border-slate-100"><div class="max-w-3xl mx-auto px-4 h-14 flex items-center justify-between">
+<a href="conversor-extractos-bancarios-pdf-excel.html" class="flex items-center gap-2 font-bold"><img src="icon.png" alt="" class="w-7 h-7 rounded-md">LedgerProof</a>
+<a href="https://vektorflow-labs.github.io/ledgerproof/descargar.html" class="text-sm font-semibold text-green-700">Descarga gratis →</a></div></header>
+<main class="max-w-3xl mx-auto px-4 py-12">
+<p class="text-sm text-slate-500">Herramienta gratis · no se sube nada</p>
+<h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 mt-2 leading-tight">Convertir Norma 43 a Excel, gratis y con control de saldos</h1>
+<p class="mt-5 text-lg text-slate-600">El fichero Norma 43 (Cuaderno 43 de la AEB) es el extracto que dan los bancos españoles para llevar la contabilidad. Abierto en Excel es una columna de líneas de 80 números pegados. Esta página lo pasa a una hoja de cálculo con fecha, concepto, importe y saldo, y antes comprueba que el fichero cuadre con sus propios totales. Todo pasa en tu ordenador: el fichero no se envía a ningún lado.</p>
+
+<section class="mt-8 rounded-2xl border border-slate-200 p-5 md:p-6 bg-slate-50">
+<p class="font-semibold">1. Tu fichero Norma 43</p>
+<div class="mt-3 flex flex-wrap items-center gap-3">
+<input id="lpn-file" type="file" class="text-sm">
+<a href="#" id="lpn-sample" class="text-sm underline text-slate-600">o prueba con un ejemplo</a></div>
+<textarea id="lpn-text" rows="5" class="mt-3 w-full rounded-lg border border-slate-300 p-3 font-mono text-xs" placeholder="...o pega aquí el contenido del fichero"></textarea>
+<div id="lpn-msg" class="mt-2 text-sm"></div>
+
+<div id="lpn-setup" class="hidden">
+<p class="font-semibold mt-6">2. Control</p>
+<div id="lpn-status" class="mt-3 text-sm leading-relaxed"></div>
+<div id="lpn-preview" class="mt-4 overflow-x-auto"></div>
+
+<p class="font-semibold mt-6">3. Descargar</p>
+<div class="mt-3 flex flex-wrap items-end gap-3 text-sm">
+<label>Formato<select id="lpn-format" class="mt-1 block rounded border border-slate-300 p-2 bg-white"><option value="xlsx">Excel (.xlsx)</option><option value="csv-eu">CSV (punto y coma, 1.234,56)</option><option value="csv">CSV (coma, 1,234.56)</option><option value="ofx">OFX</option><option value="qif">QIF</option><option value="qbo">CSV para QuickBooks Online</option><option value="xero">CSV para Xero</option></select></label>
+<button id="lpn-download" class="rounded-xl bg-green-600 hover:bg-green-700 text-white font-semibold px-5 py-2.5 disabled:opacity-50">Convertir y descargar</button>
+</div>
+<div id="lpn-after" class="hidden mt-5 rounded-xl bg-white border border-green-600 p-4 text-sm">Listo. Si también tienes <b>extractos en PDF</b> (cuentas sin Norma 43, tarjetas, meses viejos), <a class="underline font-semibold" href="conversor-extractos-bancarios-pdf-excel.html">LedgerProof</a> los convierte a Excel, CSV, OFX, QIF, QuickBooks y Xero en tu ordenador y compara cada fila con los saldos impresos. <a class="underline" href="https://vektorflow-labs.github.io/ledgerproof/descargar.html">Versión gratis</a>.</div>
+</div>
+</section>
+
+<h2 class="text-2xl font-bold mt-12">Qué comprueba</h2>
+<p class="mt-3">Un fichero Norma 43 trae al final de cada cuenta un registro de cierre (el 33) con el número de cargos y abonos, la suma de cada uno y el saldo final. La página recalcula todo a partir de los movimientos y lo compara:</p>
+<ul class="list-disc pl-6 mt-3 space-y-1">
+<li><b>Número de apuntes</b>: los cargos y abonos leídos coinciden con los que declara el banco.</li>
+<li><b>Total de cargos y total de abonos</b>: las sumas coinciden al céntimo.</li>
+<li><b>Saldo final</b>: saldo inicial + abonos − cargos da el saldo final del fichero.</li>
+<li><b>Continuidad</b>: si el fichero trae varios períodos de la misma cuenta, el saldo inicial de cada uno es el saldo final del anterior.</li>
+<li><b>Número de registros</b>: el registro de fin de fichero (88) cuenta las líneas; si no coincide, el fichero llegó cortado.</li>
+</ul>
+<p class="mt-3">Si algo no cuadra, lo verás en rojo con lo que dice el fichero y lo que suman los movimientos. Pasa más de lo que parece con ficheros copiados por correo, editados a mano o descargados a medias.</p>
+
+<h2 class="text-2xl font-bold mt-10">Qué trae el Excel</h2>
+<p class="mt-3">Una fila por movimiento con: Fecha operación, Fecha valor, Concepto (los registros complementarios 23 unidos en un texto), Importe (cargos en negativo), Saldo después de cada movimiento, Concepto común con su descripción, Concepto propio del banco, Nº de documento, Referencia 1 y 2, divisa e importe de origen (registro 24, si existe) y Cuenta. Las fechas son fechas de Excel y los importes son números, con filtros y un total al pie.</p>
+<p class="mt-3">Para seguir: <a class="underline" href="plantilla-conciliacion-bancaria-excel.html">plantilla gratis de conciliación bancaria</a> o <a class="underline" href="resumen-gastos-por-categoria-extracto-bancario-excel.html">resumen de gastos por categoría</a>.</p>
+
+<h2 class="text-2xl font-bold mt-10">Cómo es un fichero Norma 43</h2>
+<p class="mt-3">Es texto plano con registros de 80 caracteres. Los dos primeros dígitos dicen qué es cada línea:</p>
+<div class="mt-4 overflow-x-auto">
+<table class="w-full text-left text-sm min-w-[480px]">
+<thead><tr class="border-b-2 border-slate-200"><th class="py-2 pr-3">Registro</th><th class="py-2 pr-3">Qué contiene</th></tr></thead>
+<tbody class="divide-y divide-slate-100">
+<tr><td class="py-2 pr-3 font-mono">11</td><td class="py-2 pr-3">Cabecera de cuenta: entidad, oficina, número de cuenta, fechas inicial y final, saldo inicial (posiciones 34 a 47) con su signo, divisa y nombre del titular.</td></tr>
+<tr><td class="py-2 pr-3 font-mono">22</td><td class="py-2 pr-3">Movimiento: fecha de operación y fecha valor (AAMMDD), concepto común y propio, clave debe (1) o haber (2) en la posición 28, importe en las posiciones 29 a 42 con dos decimales sin coma, nº de documento y referencias.</td></tr>
+<tr><td class="py-2 pr-3 font-mono">23</td><td class="py-2 pr-3">Complementario de concepto: hasta 5 por movimiento, con el texto que ves en la banca en línea.</td></tr>
+<tr><td class="py-2 pr-3 font-mono">24</td><td class="py-2 pr-3">Equivalencia de divisa (opcional): moneda e importe originales del movimiento.</td></tr>
+<tr><td class="py-2 pr-3 font-mono">33</td><td class="py-2 pr-3">Final de cuenta: número y total de cargos, número y total de abonos, saldo final y divisa.</td></tr>
+<tr><td class="py-2 pr-3 font-mono">88</td><td class="py-2 pr-3">Fin de fichero: dieciocho nueves y el número de registros anteriores.</td></tr>
+</tbody></table></div>
+<p class="mt-3">La divisa va en código numérico ISO: 978 es euro, 840 dólar estadounidense, 826 libra esterlina.</p>
+
+<h2 class="text-2xl font-bold mt-10">Códigos de concepto común</h2>
+<p class="mt-3">El concepto común (posiciones 23 y 24 del registro 22) es igual en todos los bancos, así que sirve para clasificar movimientos de distintas entidades con la misma regla:</p>
+<div class="mt-4 overflow-x-auto">
+<table class="w-full text-left text-sm min-w-[420px]">
+<tbody class="divide-y divide-slate-100">
+<tr><td class="py-1.5 pr-3 font-mono">01</td><td>Talones - reintegros</td></tr>
+<tr><td class="py-1.5 pr-3 font-mono">02</td><td>Abonarés - entregas - ingresos</td></tr>
+<tr><td class="py-1.5 pr-3 font-mono">03</td><td>Domiciliados - recibos - letras - pagos por su cuenta</td></tr>
+<tr><td class="py-1.5 pr-3 font-mono">04</td><td>Giros - transferencias - traspasos - cheques</td></tr>
+<tr><td class="py-1.5 pr-3 font-mono">05</td><td>Amortizaciones de préstamos, créditos</td></tr>
+<tr><td class="py-1.5 pr-3 font-mono">06</td><td>Remesas de efectos</td></tr>
+<tr><td class="py-1.5 pr-3 font-mono">07</td><td>Suscripciones - dividendos pasivos - canjes</td></tr>
+<tr><td class="py-1.5 pr-3 font-mono">08</td><td>Dividendos - cupones - prima de junta - amortizaciones</td></tr>
+<tr><td class="py-1.5 pr-3 font-mono">09</td><td>Operaciones de bolsa y compraventa de valores</td></tr>
+<tr><td class="py-1.5 pr-3 font-mono">10</td><td>Cheques gasolina</td></tr>
+<tr><td class="py-1.5 pr-3 font-mono">11</td><td>Cajero automático</td></tr>
+<tr><td class="py-1.5 pr-3 font-mono">12</td><td>Tarjetas de crédito y débito</td></tr>
+<tr><td class="py-1.5 pr-3 font-mono">13</td><td>Operaciones extranjero</td></tr>
+<tr><td class="py-1.5 pr-3 font-mono">14</td><td>Devoluciones e impagados</td></tr>
+<tr><td class="py-1.5 pr-3 font-mono">15</td><td>Nóminas - seguros sociales</td></tr>
+<tr><td class="py-1.5 pr-3 font-mono">16</td><td>Timbres - corretaje - póliza</td></tr>
+<tr><td class="py-1.5 pr-3 font-mono">17</td><td>Intereses - comisiones - custodia - gastos e impuestos</td></tr>
+<tr><td class="py-1.5 pr-3 font-mono">98</td><td>Anulaciones - correcciones de asiento</td></tr>
+<tr><td class="py-1.5 pr-3 font-mono">99</td><td>Varios</td></tr>
+</tbody></table></div>
+
+<h2 class="text-2xl font-bold mt-10">Preguntas</h2>
+<details class="mt-3 border-b border-slate-100 pb-3"><summary class="font-semibold cursor-pointer">¿Qué es la Norma 43?</summary><p class="mt-2 text-slate-600">Es el formato estándar de la Asociación Española de Banca (Cuaderno 43) para que los bancos entreguen los movimientos de una cuenta en un fichero. Lo ofrecen muchos bancos en España, sobre todo en la banca de empresas, y lo leen muchos programas de contabilidad.</p></details>
+<details class="mt-3 border-b border-slate-100 pb-3"><summary class="font-semibold cursor-pointer">¿Se sube mi fichero a algún servidor?</summary><p class="mt-2 text-slate-600">No. La página lee el fichero con tu navegador y arma la descarga ahí mismo. No hay servidor detrás: puedes desconectarte de internet después de abrirla y sigue funcionando.</p></details>
+<details class="mt-3 border-b border-slate-100 pb-3"><summary class="font-semibold cursor-pointer">¿Qué extensión tiene el fichero?</summary><p class="mt-2 text-slate-600">Depende del banco: suele ser .n43 o .txt, pero el contenido es el mismo. La página no mira la extensión, mira que la primera línea empiece por 11.</p></details>
+<details class="mt-3 border-b border-slate-100 pb-3"><summary class="font-semibold cursor-pointer">El control sale en rojo. ¿Qué hago?</summary><p class="mt-2 text-slate-600">Vuelve a descargar el fichero del banco para el mismo período y pruébalo otra vez. Si sigue sin cuadrar, compara el número de movimientos con lo que ves en la banca en línea: suele faltar un día entero o haber un período repetido.</p></details>
+<details class="mt-3 border-b border-slate-100 pb-3"><summary class="font-semibold cursor-pointer">Mi banco me da el extracto en PDF, no en Norma 43. ¿Qué hago?</summary><p class="mt-2 text-slate-600">Para eso está LedgerProof: lee extractos bancarios y de tarjeta en PDF en tu ordenador, los exporta a Excel, CSV, OFX, QIF, QuickBooks y Xero, y compara cada fila con los saldos impresos. Entiende importes como 1.234,56 y la interfaz está en español. La versión Lite es gratis y convierte 2 extractos por vez.</p></details>
+
+<div class="mt-10 rounded-2xl border-2 border-green-600 p-6 text-center">
+<p class="font-bold text-lg">¿Tienes extractos en PDF?</p>
+<p class="text-slate-600 mt-1">LedgerProof convierte extractos bancarios en PDF a Excel, CSV, OFX, QIF, QuickBooks y Xero en tu ordenador, y compara cada fila con los saldos impresos en el extracto. Sin registro ni correo.</p>
+<a href="https://vektorflow-labs.github.io/ledgerproof/descargar.html" class="inline-block mt-4 rounded-xl bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-3">Descargar LedgerProof Lite (gratis)</a>
+<p class="mt-3 text-sm text-slate-600">Versión completa: USD 29, un solo pago. <a class="underline" href="conversor-extractos-bancarios-pdf-excel.html">Ver detalles</a></p></div>
+<p class="mt-10 text-sm text-slate-500">También: <a class="underline" href="convertir-ofx-a-excel.html">Convertir OFX a Excel</a> · <a class="underline" href="convertir-csv-a-ofx-qif.html">Convertir CSV a OFX</a> · <a class="underline" href="convertir-extracto-bancario-pdf-a-excel.html">Extracto bancario PDF a Excel</a> · <a class="underline" href="norma-43-to-excel-converter.html" hreflang="en">In English</a></p>
+</main>
+<footer class="py-10 text-center text-sm text-slate-500">© VektorFlow Labs · LedgerProof</footer>
+</body></html>

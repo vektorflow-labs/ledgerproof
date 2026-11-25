@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Convertir OFX a Excel gratis (también QFX, QBO y QIF a Excel o CSV) | En tu navegador</title>
+<meta name="description" content="Convierte archivos OFX, QFX, QBO o QIF a Excel o CSV gratis, o a CSV para QuickBooks Online y Xero. Funciona en tu navegador y no se sube nada. Avisa de IDs de movimiento duplicados y calcula el saldo inicial.">
+<link rel="canonical" href="https://vektorflow-labs.github.io/ledgerproof/convertir-ofx-a-excel.html">
+<link rel="alternate" hreflang="es" href="https://vektorflow-labs.github.io/ledgerproof/convertir-ofx-a-excel.html">
+<link rel="alternate" hreflang="en" href="https://vektorflow-labs.github.io/ledgerproof/ofx-to-excel-converter.html">
+<link rel="icon" href="icon.png"><link rel="stylesheet" href="styles.css">
+<script src="ofx-converter.js" defer></script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿Excel puede abrir un archivo OFX directamente?", "acceptedAnswer": {"@type": "Answer", "text": "No de forma útil. Excel no tiene importación de OFX, así que el archivo se abre como texto lleno de etiquetas como &lt;STMTTRN&gt; y &lt;TRNAMT&gt;. Si lo conviertes antes a .xlsx o CSV tienes una fila limpia por movimiento."}}, {"@type": "Question", "name": "¿Se sube mi archivo del banco?", "acceptedAnswer": {"@type": "Answer", "text": "No. La página lee el archivo con tu navegador y arma la descarga ahí mismo. No hay ningún servidor detrás: puedes desconectarte de internet después de abrirla y sigue funcionando."}}, {"@type": "Question", "name": "¿Puedo convertir QIF a OFX, u OFX a QIF?", "acceptedAnswer": {"@type": "Answer", "text": "Sí. Abre un QIF y elige OFX como formato, o abre un OFX/QFX y elige QIF. Se conservan los números de cheque, los conceptos, el detalle y las categorías del QIF."}}, {"@type": "Question", "name": "¿Qué CSV elijo para Excel en español?", "acceptedAnswer": {"@type": "Answer", "text": "\"CSV (punto y coma, 1.234,56)\". Es el que Excel abre bien cuando la configuración regional usa la coma como separador decimal. Si tienes dudas, descarga el .xlsx: abre igual en cualquier configuración."}}, {"@type": "Question", "name": "Mi banco solo me da extractos en PDF. ¿Qué hago?", "acceptedAnswer": {"@type": "Answer", "text": "Necesitas un conversor de PDF. LedgerProof lee extractos bancarios y de tarjeta en PDF en tu computadora, exporta a Excel, CSV, OFX, QIF, QuickBooks y Xero, y compara cada fila con los saldos impresos. Entiende formatos como 1.234,56 y la interfaz está en español. La versión Lite es gratis y convierte 2 extractos por vez."}}]}</script>
+</head>
+<body class="bg-white text-slate-800 antialiased">
+<header class="border-b border-slate-100"><div class="max-w-3xl mx-auto px-4 h-14 flex items-center justify-between">
+<a href="conversor-extractos-bancarios-pdf-excel.html" class="flex items-center gap-2 font-bold"><img src="icon.png" alt="" class="w-7 h-7 rounded-md">LedgerProof</a>
+<a href="https://vektorflow-labs.github.io/ledgerproof/descargar.html" class="text-sm font-semibold text-green-700">Descarga gratis →</a></div></header>
+<main class="max-w-3xl mx-auto px-4 py-12">
+<p class="text-sm text-slate-500">Herramienta gratis · no se sube nada</p>
+<h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 mt-2 leading-tight">Convertir OFX a Excel gratis (y QFX, QBO y QIF)</h1>
+<p class="mt-5 text-lg text-slate-600">Excel no abre bien los archivos OFX o QFX: muestra una pantalla llena de etiquetas. Esta página los pasa a una planilla de verdad, con fechas como fechas e importes como números, o a un CSV para QuickBooks Online o Xero. Funciona en tu computadora, así que tus movimientos no se envían a ningún lado.</p>
+
+<section class="mt-8 rounded-2xl border border-slate-200 p-5 md:p-6 bg-slate-50">
+<p class="font-semibold">1. Tu archivo</p>
+<div class="mt-3 flex flex-wrap items-center gap-3">
+<input id="lpo-file" type="file" accept=".ofx,.qfx,.qbo,.qif,.txt" class="text-sm">
+<a href="#" id="lpo-sample" class="text-sm underline text-slate-600">o prueba con un ejemplo</a></div>
+<textarea id="lpo-text" rows="5" class="mt-3 w-full rounded-lg border border-slate-300 p-3 font-mono text-xs" placeholder="...o pega aquí el contenido del archivo"></textarea>
+<div id="lpo-msg" class="mt-2 text-sm"></div>
+
+<div id="lpo-setup" class="hidden">
+<p class="font-semibold mt-6">2. Control</p>
+<div id="lpo-status" class="mt-3 text-sm leading-relaxed"></div>
+<label id="lpo-qif-wrap" class="hidden mt-3 block text-sm">Formato de fecha del QIF<select id="lpo-datefmt" class="mt-1 block rounded border border-slate-300 p-2 bg-white"><option value="auto">Detectar</option><option value="mdy">MM/DD/AAAA</option><option value="dmy">DD/MM/AAAA</option></select></label>
+<div id="lpo-preview" class="mt-4 overflow-x-auto"></div>
+
+<p class="font-semibold mt-6">3. Descargar</p>
+<div class="mt-3 flex flex-wrap items-end gap-3 text-sm">
+<label>Formato<select id="lpo-format" class="mt-1 block rounded border border-slate-300 p-2 bg-white"><option value="xlsx">Excel (.xlsx)</option><option value="csv-eu">CSV (punto y coma, 1.234,56)</option><option value="csv">CSV (coma, 1,234.56)</option><option value="qbo">CSV para QuickBooks Online</option><option value="xero">CSV para Xero</option><option value="qif">QIF</option><option value="ofx">OFX</option></select></label>
+<label id="lpo-cur-wrap" class="hidden">Moneda<input id="lpo-currency" value="EUR" maxlength="3" class="mt-1 block w-20 rounded border border-slate-300 p-2"></label>
+<button id="lpo-download" class="rounded-xl bg-green-600 hover:bg-green-700 text-white font-semibold px-5 py-2.5 disabled:opacity-50">Convertir y descargar</button>
+</div>
+<div id="lpo-after" class="hidden mt-5 rounded-xl bg-white border border-green-600 p-4 text-sm">Listo. Si también tienes <b>extractos en PDF</b> (meses viejos, cuentas cerradas, bancos que no dejan descargar), <a class="underline font-semibold" href="conversor-extractos-bancarios-pdf-excel.html">LedgerProof</a> los convierte a Excel, CSV, OFX, QIF, QuickBooks y Xero en tu computadora y compara cada fila con los saldos impresos. <a class="underline" href="https://vektorflow-labs.github.io/ledgerproof/descargar.html">Versión gratis</a>.</div>
+</div>
+</section>
+
+<h2 class="text-2xl font-bold mt-12">Cómo se usa</h2>
+<ol class="list-decimal pl-6 mt-3 space-y-1">
+<li>En la banca en línea, descarga los movimientos en formato OFX, "Quicken (QFX)", "QuickBooks (QBO)" o QIF.</li>
+<li>Elige el archivo. La página lee todos los movimientos, también en archivos con varias cuentas.</li>
+<li>Mira el control: cantidad de movimientos, fechas, entradas y salidas, y los avisos que se explican abajo.</li>
+<li>Elige Excel o uno de los CSV y descarga.</li>
+</ol>
+
+<h2 class="text-2xl font-bold mt-10">Qué te dice el control</h2>
+<ul class="list-disc pl-6 mt-3 space-y-1">
+<li><b>IDs de movimiento duplicados.</b> El banco le pone un identificador a cada movimiento del OFX (FITID). Si el mismo ID aparece dos veces en una cuenta, probablemente una de las filas está duplicada.</li>
+<li><b>Saldo inicial que resulta.</b> Cuando el archivo trae el saldo final, la página le resta los movimientos y te da el saldo con el que empezó el período. Compáralo con el saldo final del extracto anterior: si no coincide, falta o sobra algún movimiento.</li>
+<li><b>Filas repetidas.</b> Las filas con la misma fecha, importe y concepto se listan para que las revises. Dos cafés iguales el mismo día son normales; dos pagos de alquiler iguales, probablemente no.</li>
+</ul>
+
+<h2 class="text-2xl font-bold mt-10">Qué trae el Excel</h2>
+<p class="mt-3">Una fila por movimiento con estas columnas: Fecha, Concepto, Detalle, Importe (lo que sale en negativo), Tipo, Cheque/Ref, Categoría (de los QIF), Cuenta e ID del banco. Las fechas son fechas de Excel y los importes son números, así que ordenar, filtrar, SUMAR.SI.CONJUNTO y las tablas dinámicas funcionan de entrada. La fila de encabezado queda fija, con filtros, y debajo de la columna Importe hay un total.</p>
+<p class="mt-3">Para seguir: <a class="underline" href="resumen-gastos-por-categoria-extracto-bancario-excel.html">resumir los gastos por categoría</a> o usar la <a class="underline" href="plantilla-conciliacion-bancaria-excel.html">plantilla gratis de conciliación bancaria</a>.</p>
+
+<h2 class="text-2xl font-bold mt-10">OFX, QFX, QBO y QIF</h2>
+<ul class="list-disc pl-6 mt-3 space-y-1">
+<li><b>OFX</b> (Open Financial Exchange) es el formato estándar de descarga bancaria. La versión 1.x parece etiquetas sin cerrar; la 2.x es XML. Las dos funcionan aquí.</li>
+<li><b>QFX</b> es como llama Quicken a un OFX con un encabezado extra de Intuit. El contenido es el mismo.</li>
+<li><b>QBO</b> es QuickBooks Web Connect, que por dentro también es OFX. No tiene que ver con QuickBooks Online.</li>
+<li><b>QIF</b> es el formato de texto viejo de Quicken. No trae IDs ni saldo final, y las fechas pueden venir con el mes o el día primero, por eso la página te deja elegir.</li>
+</ul>
+
+<h2 class="text-2xl font-bold mt-10">Preguntas</h2>
+<details class="mt-3 border-b border-slate-100 pb-3"><summary class="font-semibold cursor-pointer">¿Excel puede abrir un archivo OFX directamente?</summary><p class="mt-2 text-slate-600">No de forma útil. Excel no tiene importación de OFX, así que el archivo se abre como texto lleno de etiquetas como &lt;STMTTRN&gt; y &lt;TRNAMT&gt;. Si lo conviertes antes a .xlsx o CSV tienes una fila limpia por movimiento.</p></details>
+<details class="mt-3 border-b border-slate-100 pb-3"><summary class="font-semibold cursor-pointer">¿Se sube mi archivo del banco?</summary><p class="mt-2 text-slate-600">No. La página lee el archivo con tu navegador y arma la descarga ahí mismo. No hay ningún servidor detrás: puedes desconectarte de internet después de abrirla y sigue funcionando.</p></details>
+<details class="mt-3 border-b border-slate-100 pb-3"><summary class="font-semibold cursor-pointer">¿Puedo convertir QIF a OFX, u OFX a QIF?</summary><p class="mt-2 text-slate-600">Sí. Abre un QIF y elige OFX como formato, o abre un OFX/QFX y elige QIF. Se conservan los números de cheque, los conceptos, el detalle y las categorías del QIF.</p></details>
+<details class="mt-3 border-b border-slate-100 pb-3"><summary class="font-semibold cursor-pointer">¿Qué CSV elijo para Excel en español?</summary><p class="mt-2 text-slate-600">"CSV (punto y coma, 1.234,56)". Es el que Excel abre bien cuando la configuración regional usa la coma como separador decimal. Si tienes dudas, descarga el .xlsx: abre igual en cualquier configuración.</p></details>
+<details class="mt-3 border-b border-slate-100 pb-3"><summary class="font-semibold cursor-pointer">Mi banco solo me da extractos en PDF. ¿Qué hago?</summary><p class="mt-2 text-slate-600">Necesitas un conversor de PDF. LedgerProof lee extractos bancarios y de tarjeta en PDF en tu computadora, exporta a Excel, CSV, OFX, QIF, QuickBooks y Xero, y compara cada fila con los saldos impresos. Entiende formatos como 1.234,56 y la interfaz está en español. La versión Lite es gratis y convierte 2 extractos por vez.</p></details>
+
+<div class="mt-10 rounded-2xl border-2 border-green-600 p-6 text-center">
+<p class="font-bold text-lg">¿También tienes extractos en PDF?</p>
+<p class="text-slate-600 mt-1">LedgerProof convierte extractos bancarios en PDF a Excel, CSV, OFX, QIF, QuickBooks y Xero en tu computadora, y compara cada fila con los saldos impresos en el extracto. Sin registro ni correo.</p>
+<a href="https://vektorflow-labs.github.io/ledgerproof/descargar.html" class="inline-block mt-4 rounded-xl bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-3">Descargar LedgerProof Lite (gratis)</a>
+<p class="mt-3 text-sm text-slate-600">Versión completa: USD 29, un solo pago. <a class="underline" href="conversor-extractos-bancarios-pdf-excel.html">Ver detalles</a></p></div>
+<p class="mt-10 text-sm text-slate-500">También: <a class="underline" href="convertir-norma-43-a-excel.html">Convertir Norma 43 a Excel</a> · <a class="underline" href="convertir-csv-a-ofx-qif.html">Convertir CSV a OFX</a> · <a class="underline" href="convertir-extracto-bancario-pdf-a-excel.html">Extracto bancario PDF a Excel</a> · <a class="underline" href="ofx-to-excel-converter.html" hreflang="en">In English</a></p>
+</main>
+<footer class="py-10 text-center text-sm text-slate-500">© VektorFlow Labs · LedgerProof</footer>
+</body></html>

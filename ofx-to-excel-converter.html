@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Free OFX to Excel Converter (QFX, QBO and QIF to Excel or CSV) | Runs in Your Browser</title>
+<meta name="description" content="Convert OFX, QFX, QBO (Web Connect) or QIF files to Excel or CSV for free, or to QuickBooks Online and Xero CSV. Runs in your browser, nothing is uploaded. Flags duplicate transaction IDs and shows the implied opening balance.">
+<link rel="canonical" href="https://vektorflow-labs.github.io/ledgerproof/ofx-to-excel-converter.html">
+<link rel="alternate" hreflang="en" href="https://vektorflow-labs.github.io/ledgerproof/ofx-to-excel-converter.html">
+<link rel="alternate" hreflang="es" href="https://vektorflow-labs.github.io/ledgerproof/convertir-ofx-a-excel.html">
+<link rel="icon" href="icon.png"><link rel="stylesheet" href="styles.css">
+<script src="ofx-converter.js" defer></script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Can Excel open an OFX file directly?", "acceptedAnswer": {"@type": "Answer", "text": "Not in a useful way. Excel has no OFX import, so the file opens as text full of tags like &lt;STMTTRN&gt; and &lt;TRNAMT&gt;. Converting it to .xlsx or CSV first gives you one clean row per transaction."}}, {"@type": "Question", "name": "Is my bank file uploaded?", "acceptedAnswer": {"@type": "Answer", "text": "No. The page reads the file with your browser and builds the download there. There's no server behind it: you can go offline after the page loads and it keeps working."}}, {"@type": "Question", "name": "Can I convert QIF to OFX, or OFX to QIF?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Open a QIF file and choose OFX as the format, or open an OFX/QFX file and choose QIF. Check numbers, payees, memos and QIF categories are carried over."}}, {"@type": "Question", "name": "Can I import the result into QuickBooks Online or Xero?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Choose \"QuickBooks Online CSV\" (Date, Description, Amount with MM/DD/YYYY dates) or \"Xero CSV\" (Xero's statement template). Details in the QuickBooks CSV format and the Xero CSV format."}}, {"@type": "Question", "name": "My bank only gives me PDF statements. What then?", "acceptedAnswer": {"@type": "Answer", "text": "Then you need a PDF converter. LedgerProof reads PDF bank and credit card statements on your computer, exports to Excel, CSV, OFX, QIF, QuickBooks and Xero, and checks every row against the balances printed on the statement. The free Lite version converts 2 statements at a time."}}]}</script>
+</head>
+<body class="bg-white text-slate-800 antialiased">
+<header class="border-b border-slate-100"><div class="max-w-3xl mx-auto px-4 h-14 flex items-center justify-between">
+<a href="index.html" class="flex items-center gap-2 font-bold"><img src="icon.png" alt="" class="w-7 h-7 rounded-md">LedgerProof</a>
+<a href="https://vektorflow-labs.github.io/ledgerproof/download.html" class="text-sm font-semibold text-green-700">Free download →</a></div></header>
+<main class="max-w-3xl mx-auto px-4 py-12">
+<p class="text-sm text-slate-500">Free tool · nothing is uploaded</p>
+<h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 mt-2 leading-tight">Free OFX to Excel converter (QFX, QBO and QIF too)</h1>
+<p class="mt-5 text-lg text-slate-600">Excel can't open OFX or QFX files properly: you get a screen of tags. This page turns them into a real spreadsheet, with dates as dates and amounts as numbers, or into a CSV for QuickBooks Online or Xero. It runs on your computer, so your transactions are never sent anywhere.</p>
+
+<section class="mt-8 rounded-2xl border border-slate-200 p-5 md:p-6 bg-slate-50">
+<p class="font-semibold">1. Your file</p>
+<div class="mt-3 flex flex-wrap items-center gap-3">
+<input id="lpo-file" type="file" accept=".ofx,.qfx,.qbo,.qif,.txt" class="text-sm">
+<a href="#" id="lpo-sample" class="text-sm underline text-slate-600">or try a sample</a></div>
+<textarea id="lpo-text" rows="5" class="mt-3 w-full rounded-lg border border-slate-300 p-3 font-mono text-xs" placeholder="...or paste the file contents here"></textarea>
+<div id="lpo-msg" class="mt-2 text-sm"></div>
+
+<div id="lpo-setup" class="hidden">
+<p class="font-semibold mt-6">2. Check</p>
+<div id="lpo-status" class="mt-3 text-sm leading-relaxed"></div>
+<label id="lpo-qif-wrap" class="hidden mt-3 block text-sm">QIF date format<select id="lpo-datefmt" class="mt-1 block rounded border border-slate-300 p-2 bg-white"><option value="auto">Detect</option><option value="mdy">MM/DD/YYYY</option><option value="dmy">DD/MM/YYYY</option></select></label>
+<div id="lpo-preview" class="mt-4 overflow-x-auto"></div>
+
+<p class="font-semibold mt-6">3. Download</p>
+<div class="mt-3 flex flex-wrap items-end gap-3 text-sm">
+<label>Format<select id="lpo-format" class="mt-1 block rounded border border-slate-300 p-2 bg-white"><option value="xlsx">Excel (.xlsx)</option><option value="csv">CSV (comma)</option><option value="csv-eu">CSV (semicolon, 1.234,56)</option><option value="qbo">QuickBooks Online CSV</option><option value="xero">Xero CSV</option><option value="qif">QIF</option><option value="ofx">OFX</option></select></label>
+<label id="lpo-cur-wrap" class="hidden">Currency<input id="lpo-currency" value="USD" maxlength="3" class="mt-1 block w-20 rounded border border-slate-300 p-2"></label>
+<button id="lpo-download" class="rounded-xl bg-green-600 hover:bg-green-700 text-white font-semibold px-5 py-2.5 disabled:opacity-50">Convert and download</button>
+</div>
+<div id="lpo-after" class="hidden mt-5 rounded-xl bg-white border border-green-600 p-4 text-sm">Done. If you also have <b>PDF statements</b> (older months, closed accounts, banks without downloads), <a class="underline font-semibold" href="index.html">LedgerProof</a> converts those to Excel, CSV, OFX, QIF, QuickBooks and Xero on your computer and checks every row against the printed balances. <a class="underline" href="https://vektorflow-labs.github.io/ledgerproof/download.html">Free version</a>.</div>
+</div>
+</section>
+
+<h2 class="text-2xl font-bold mt-12">How to use it</h2>
+<ol class="list-decimal pl-6 mt-3 space-y-1">
+<li>In online banking, download your transactions as OFX, "Quicken (QFX)", "QuickBooks Web Connect (QBO)" or QIF.</li>
+<li>Choose the file. The page reads every transaction, including files with several accounts.</li>
+<li>Look at the check: number of transactions, date range, money in and out, and the warnings described below.</li>
+<li>Pick Excel or one of the CSV layouts and download.</li>
+</ol>
+
+<h2 class="text-2xl font-bold mt-10">What the check tells you</h2>
+<ul class="list-disc pl-6 mt-3 space-y-1">
+<li><b>Duplicate transaction IDs.</b> Banks give every OFX transaction an ID (FITID). If the same ID shows up twice in one account, one of the rows is probably a duplicate.</li>
+<li><b>Implied opening balance.</b> When the file includes the closing balance, the page subtracts the transactions to get the balance the period started with. Compare it with the closing balance of the previous statement: if they don't match, a transaction is missing or extra.</li>
+<li><b>Repeated rows.</b> Rows with the same date, amount and description are listed so you can look at them. Two identical coffees on the same day are real; two identical rent payments probably aren't.</li>
+</ul>
+
+<h2 class="text-2xl font-bold mt-10">What's in the Excel file</h2>
+<p class="mt-3">One row per transaction with these columns: Date, Description (the payee), Memo, Amount (money out negative), Type, Check/Ref, Category (from QIF files), Account and Bank ID. Dates are real Excel dates and amounts are numbers, so sorting, filters, SUMIFS and pivot tables work right away. The header row is frozen with filters on, and a total sits under the Amount column.</p>
+<p class="mt-3">Next steps: <a class="underline" href="reconcile-bank-statement-in-excel.html">reconcile the account in Excel</a> or start from the <a class="underline" href="free-bank-reconciliation-template-excel.html">free bank reconciliation template</a>.</p>
+
+<h2 class="text-2xl font-bold mt-10">OFX, QFX, QBO and QIF</h2>
+<ul class="list-disc pl-6 mt-3 space-y-1">
+<li><b>OFX</b> (Open Financial Exchange) is the standard bank download format. Versions 1.x look like unclosed tags; 2.x is XML. Both work here.</li>
+<li><b>QFX</b> is Quicken's name for an OFX file with an extra Intuit header. Same content.</li>
+<li><b>QBO</b> is QuickBooks Web Connect, also OFX inside. Don't confuse it with QuickBooks Online.</li>
+<li><b>QIF</b> is the older Quicken text format. It has no transaction IDs and no closing balance, and dates can be month-first or day-first, so the page lets you choose.</li>
+</ul>
+<p class="mt-3">More on choosing between them in <a class="underline" href="pdf-bank-statement-to-ofx-qif.html">OFX vs QIF</a>.</p>
+
+<h2 class="text-2xl font-bold mt-10">Questions</h2>
+<details class="mt-3 border-b border-slate-100 pb-3"><summary class="font-semibold cursor-pointer">Can Excel open an OFX file directly?</summary><p class="mt-2 text-slate-600">Not in a useful way. Excel has no OFX import, so the file opens as text full of tags like &lt;STMTTRN&gt; and &lt;TRNAMT&gt;. Converting it to .xlsx or CSV first gives you one clean row per transaction.</p></details>
+<details class="mt-3 border-b border-slate-100 pb-3"><summary class="font-semibold cursor-pointer">Is my bank file uploaded?</summary><p class="mt-2 text-slate-600">No. The page reads the file with your browser and builds the download there. There's no server behind it: you can go offline after the page loads and it keeps working.</p></details>
+<details class="mt-3 border-b border-slate-100 pb-3"><summary class="font-semibold cursor-pointer">Can I convert QIF to OFX, or OFX to QIF?</summary><p class="mt-2 text-slate-600">Yes. Open a QIF file and choose OFX as the format, or open an OFX/QFX file and choose QIF. Check numbers, payees, memos and QIF categories are carried over.</p></details>
+<details class="mt-3 border-b border-slate-100 pb-3"><summary class="font-semibold cursor-pointer">Can I import the result into QuickBooks Online or Xero?</summary><p class="mt-2 text-slate-600">Yes. Choose "QuickBooks Online CSV" (Date, Description, Amount with MM/DD/YYYY dates) or "Xero CSV" (Xero's statement template). Details in <a class="underline" href="bank-statement-to-quickbooks-csv.html">the QuickBooks CSV format</a> and <a class="underline" href="bank-statement-to-xero-csv.html">the Xero CSV format</a>.</p></details>
+<details class="mt-3 border-b border-slate-100 pb-3"><summary class="font-semibold cursor-pointer">My bank only gives me PDF statements. What then?</summary><p class="mt-2 text-slate-600">Then you need a PDF converter. LedgerProof reads PDF bank and credit card statements on your computer, exports to Excel, CSV, OFX, QIF, QuickBooks and Xero, and checks every row against the balances printed on the statement. The free Lite version converts 2 statements at a time.</p></details>
+
+<div class="mt-10 rounded-2xl border-2 border-green-600 p-6 text-center">
+<p class="font-bold text-lg">Have PDF statements too?</p>
+<p class="text-slate-600 mt-1">LedgerProof converts PDF bank statements to Excel, CSV, OFX, QIF, QuickBooks and Xero on your computer, and checks every row against the balances printed on the statement. No sign-up, no email.</p>
+<a href="https://vektorflow-labs.github.io/ledgerproof/download.html" class="inline-block mt-4 rounded-xl bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-3">Download LedgerProof Lite (free)</a>
+<p class="mt-3 text-sm text-slate-600">Or <a class="underline" href="index.html">get the full version</a> ($29 once).</p></div>
+<p class="mt-10 text-sm text-slate-500">Also: <a class="underline" href="csv-to-ofx-converter.html">CSV to OFX converter</a> · <a class="underline" href="pdf-bank-statement-to-excel.html">PDF bank statement to Excel</a> · <a class="underline" href="convertir-ofx-a-excel.html" hreflang="es">En español</a></p>
+</main>
+<footer class="py-10 text-center text-sm text-slate-500">© VektorFlow Labs · LedgerProof</footer>
+</body></html>

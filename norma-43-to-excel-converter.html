@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Free Norma 43 to Excel Converter (Spanish bank files to Excel, CSV, OFX) | Balance-checked</title>
+<meta name="description" content="Convert a Spanish bank's Norma 43 (AEB Cuaderno 43) file to Excel, CSV, OFX, QIF, QuickBooks Online or Xero for free. Runs in your browser, nothing uploaded. Checks the file against its own totals and closing balance.">
+<link rel="canonical" href="https://vektorflow-labs.github.io/ledgerproof/norma-43-to-excel-converter.html">
+<link rel="alternate" hreflang="en" href="https://vektorflow-labs.github.io/ledgerproof/norma-43-to-excel-converter.html">
+<link rel="alternate" hreflang="es" href="https://vektorflow-labs.github.io/ledgerproof/convertir-norma-43-a-excel.html">
+<link rel="icon" href="icon.png"><link rel="stylesheet" href="styles.css">
+<script src="ofx-converter.js" defer></script>
+<script src="norma43.js" defer></script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What is a Norma 43 file?", "acceptedAnswer": {"@type": "Answer", "text": "It's the Spanish Banking Association's standard (Cuaderno 43) for delivering account transactions in a file. Many banks in Spain offer it, mainly in business online banking, and many accounting programs import it. Files usually end in .n43 or .txt."}}, {"@type": "Question", "name": "Is my file uploaded?", "acceptedAnswer": {"@type": "Answer", "text": "No. Your browser reads the file and builds the download on your computer. There's no server behind the page: you can go offline after it loads and it keeps working."}}, {"@type": "Question", "name": "Can I import it into QuickBooks Online or Xero?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Choose \"QuickBooks Online CSV\" or \"Xero CSV\", or OFX for Xero, QuickBooks Desktop, Wave and most money apps. More in the QuickBooks CSV format and the Xero CSV format."}}, {"@type": "Question", "name": "My bank only gives me PDF statements. What then?", "acceptedAnswer": {"@type": "Answer", "text": "LedgerProof reads PDF bank and credit card statements on your computer, including Spanish ones with amounts like 1.234,56, exports to Excel, CSV, OFX, QIF, QuickBooks and Xero, and checks every row against the printed balances. The free Lite version converts 2 statements at a time."}}]}</script>
+</head>
+<body class="bg-white text-slate-800 antialiased">
+<header class="border-b border-slate-100"><div class="max-w-3xl mx-auto px-4 h-14 flex items-center justify-between">
+<a href="index.html" class="flex items-center gap-2 font-bold"><img src="icon.png" alt="" class="w-7 h-7 rounded-md">LedgerProof</a>
+<a href="https://vektorflow-labs.github.io/ledgerproof/download.html" class="text-sm font-semibold text-green-700">Free download →</a></div></header>
+<main class="max-w-3xl mx-auto px-4 py-12">
+<p class="text-sm text-slate-500">Free tool · nothing is uploaded</p>
+<h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 mt-2 leading-tight">Free Norma 43 to Excel converter, with a balance check</h1>
+<p class="mt-5 text-lg text-slate-600">Spanish banks export account transactions as Norma 43 (AEB Cuaderno 43) files: plain text with fixed 80-character records that Excel shows as one long column of digits. This page turns the file into a spreadsheet with date, description, amount and running balance, after checking it against its own totals. It runs on your computer: the file is never sent anywhere.</p>
+
+<section class="mt-8 rounded-2xl border border-slate-200 p-5 md:p-6 bg-slate-50">
+<p class="font-semibold">1. Your Norma 43 file</p>
+<div class="mt-3 flex flex-wrap items-center gap-3">
+<input id="lpn-file" type="file" class="text-sm">
+<a href="#" id="lpn-sample" class="text-sm underline text-slate-600">or try a sample</a></div>
+<textarea id="lpn-text" rows="5" class="mt-3 w-full rounded-lg border border-slate-300 p-3 font-mono text-xs" placeholder="...or paste the file contents here"></textarea>
+<div id="lpn-msg" class="mt-2 text-sm"></div>
+
+<div id="lpn-setup" class="hidden">
+<p class="font-semibold mt-6">2. Check</p>
+<div id="lpn-status" class="mt-3 text-sm leading-relaxed"></div>
+<div id="lpn-preview" class="mt-4 overflow-x-auto"></div>
+
+<p class="font-semibold mt-6">3. Download</p>
+<div class="mt-3 flex flex-wrap items-end gap-3 text-sm">
+<label>Format<select id="lpn-format" class="mt-1 block rounded border border-slate-300 p-2 bg-white"><option value="xlsx">Excel (.xlsx)</option><option value="csv">CSV (comma, 1,234.56)</option><option value="csv-eu">CSV (semicolon, 1.234,56)</option><option value="ofx">OFX</option><option value="qif">QIF</option><option value="qbo">QuickBooks Online CSV</option><option value="xero">Xero CSV</option></select></label>
+<button id="lpn-download" class="rounded-xl bg-green-600 hover:bg-green-700 text-white font-semibold px-5 py-2.5 disabled:opacity-50">Convert and download</button>
+</div>
+<div id="lpn-after" class="hidden mt-5 rounded-xl bg-white border border-green-600 p-4 text-sm">Done. If you also have <b>PDF statements</b> (accounts without Norma 43, cards, older months), <a class="underline font-semibold" href="index.html">LedgerProof</a> converts those to Excel, CSV, OFX, QIF, QuickBooks and Xero on your computer and checks every row against the printed balances. <a class="underline" href="https://vektorflow-labs.github.io/ledgerproof/download.html">Free version</a>.</div>
+</div>
+</section>
+
+<h2 class="text-2xl font-bold mt-12">What it checks</h2>
+<p class="mt-3">Each account in a Norma 43 file ends with a closing record (33) holding the number of debits and credits, the total of each and the closing balance. The page recalculates all of it from the transactions:</p>
+<ul class="list-disc pl-6 mt-3 space-y-1">
+<li><b>Number of entries</b>: debits and credits read match the counts the bank declares.</li>
+<li><b>Total debits and total credits</b>: match to the cent.</li>
+<li><b>Closing balance</b>: opening + credits − debits equals the closing balance in the file.</li>
+<li><b>Continuity</b>: when the file holds several periods of the same account, each opening balance equals the previous closing balance.</li>
+<li><b>Record count</b>: the end-of-file record (88) counts the lines, so a truncated download is caught.</li>
+</ul>
+
+<h2 class="text-2xl font-bold mt-10">What's in the Excel file</h2>
+<p class="mt-3">One row per transaction with transaction date, value date, description (the 23 concept records joined), amount (debits negative), balance after each transaction, common concept code with its meaning, the bank's own concept code, document number, references 1 and 2, original currency and amount (record 24, when present) and account. Dates are real Excel dates and amounts are numbers, with filters and a total row.</p>
+<p class="mt-3">Next: <a class="underline" href="reconcile-bank-statement-in-excel.html">reconcile the account in Excel</a> or use the <a class="underline" href="free-bank-reconciliation-template-excel.html">free bank reconciliation template</a>.</p>
+
+<h2 class="text-2xl font-bold mt-10">The Norma 43 format in short</h2>
+<ul class="list-disc pl-6 mt-3 space-y-1">
+<li><b>11</b> account header: bank, branch, account number, start and end dates, opening balance and its sign, currency (ISO numeric: 978 is EUR), account holder.</li>
+<li><b>22</b> transaction: transaction and value dates (YYMMDD), common and bank concept codes, debit (1) or credit (2) at position 28, amount at positions 29 to 42 with two implied decimals, document number and references.</li>
+<li><b>23</b> description lines, up to 5 per transaction. <b>24</b> optional original currency and amount.</li>
+<li><b>33</b> account end: number and total of debits and credits, closing balance. <b>88</b> end of file with the record count.</li>
+</ul>
+
+<h2 class="text-2xl font-bold mt-10">Questions</h2>
+<details class="mt-3 border-b border-slate-100 pb-3"><summary class="font-semibold cursor-pointer">What is a Norma 43 file?</summary><p class="mt-2 text-slate-600">It's the Spanish Banking Association's standard (Cuaderno 43) for delivering account transactions in a file. Many banks in Spain offer it, mainly in business online banking, and many accounting programs import it. Files usually end in .n43 or .txt.</p></details>
+<details class="mt-3 border-b border-slate-100 pb-3"><summary class="font-semibold cursor-pointer">Is my file uploaded?</summary><p class="mt-2 text-slate-600">No. Your browser reads the file and builds the download on your computer. There's no server behind the page: you can go offline after it loads and it keeps working.</p></details>
+<details class="mt-3 border-b border-slate-100 pb-3"><summary class="font-semibold cursor-pointer">Can I import it into QuickBooks Online or Xero?</summary><p class="mt-2 text-slate-600">Yes. Choose "QuickBooks Online CSV" or "Xero CSV", or OFX for Xero, QuickBooks Desktop, Wave and most money apps. More in <a class="underline" href="bank-statement-to-quickbooks-csv.html">the QuickBooks CSV format</a> and <a class="underline" href="bank-statement-to-xero-csv.html">the Xero CSV format</a>.</p></details>
+<details class="mt-3 border-b border-slate-100 pb-3"><summary class="font-semibold cursor-pointer">My bank only gives me PDF statements. What then?</summary><p class="mt-2 text-slate-600">LedgerProof reads PDF bank and credit card statements on your computer, including Spanish ones with amounts like 1.234,56, exports to Excel, CSV, OFX, QIF, QuickBooks and Xero, and checks every row against the printed balances. The free Lite version converts 2 statements at a time.</p></details>
+
+<div class="mt-10 rounded-2xl border-2 border-green-600 p-6 text-center">
+<p class="font-bold text-lg">Have PDF statements too?</p>
+<p class="text-slate-600 mt-1">LedgerProof converts PDF bank statements to Excel, CSV, OFX, QIF, QuickBooks and Xero on your computer, and checks every row against the balances printed on the statement. No sign-up, no email.</p>
+<a href="https://vektorflow-labs.github.io/ledgerproof/download.html" class="inline-block mt-4 rounded-xl bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-3">Download LedgerProof Lite (free)</a>
+<p class="mt-3 text-sm text-slate-600">Or <a class="underline" href="index.html">get the full version</a> ($29 once).</p></div>
+<p class="mt-10 text-sm text-slate-500">Also: <a class="underline" href="ofx-to-excel-converter.html">OFX/QFX to Excel converter</a> · <a class="underline" href="csv-to-ofx-converter.html">CSV to OFX converter</a> · <a class="underline" href="convertir-norma-43-a-excel.html" hreflang="es">En español</a></p>
+</main>
+<footer class="py-10 text-center text-sm text-slate-500">© VektorFlow Labs · LedgerProof</footer>
+</body></html>
