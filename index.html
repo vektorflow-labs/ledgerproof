@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>LedgerProof – Convert PDF bank statements to Excel, verified to the cent</title>
+<title>LedgerProof: convert PDF bank statements to Excel, checked to the cent</title>
 <meta name="description" content="Turn PDF bank statements into Excel, CSV, QuickBooks, Xero or OFX on your own computer. Every row is checked against the printed balances. One-time $29, no subscription, no uploads.">
 <link rel="canonical" href="https://vektorflow-labs.github.io/ledgerproof/">
 <link rel="alternate" hreflang="en" href="https://vektorflow-labs.github.io/ledgerproof/">
@@ -24,7 +24,7 @@
            {"@type":"Offer","name":"LedgerProof Lite","price":"0","priceCurrency":"USD","url":"https://vektorflow-labs.github.io/ledgerproof/download.html"}],
  "publisher":{"@type":"Organization","name":"VektorFlow Labs","url":"https://vektorflow-labs.github.io/ledgerproof/"}}
 </script>
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Will it work with my bank?", "acceptedAnswer": {"@type": "Answer", "text": "LedgerProof doesn't use per-bank templates. It finds the date and money columns from their positions, then picks the interpretation where your running balances add up. It's stress-tested on 400+ generated statement layouts (US, UK, EU and AU styles, debit/credit or signed columns, CR/DR markers, newest-first lists, wrapped descriptions, multi-page). If one of your statements doesn't convert, you get a refund within 30 days."}}, {"@type": "Question", "name": "What about scanned or photographed statements?", "acceptedAnswer": {"@type": "Answer", "text": "Statements downloaded from online banking are converted offline with no AI. For scans, turn on the optional AI reader with your own free Google Gemini key (1 minute to create) or a local Ollama model. Its output goes through the same balance check."}}, {"@type": "Question", "name": "Is my data uploaded anywhere?", "acceptedAnswer": {"@type": "Answer", "text": "No. LedgerProof runs on your computer and works offline after installation. It sends no usage statistics. Only if you choose the Gemini AI reader are those specific files sent to Google under your own key."}}, {"@type": "Question", "name": "Do I need to be technical?", "acceptedAnswer": {"@type": "Answer", "text": "No. Double-click the installer, then the desktop icon. LedgerProof opens in your browser like a website. A visual quickstart guide is included."}}, {"@type": "Question", "name": "Can I use it for my clients?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Use it on the computers you work on for any number of clients. Just don't resell or redistribute the software itself."}}, {"@type": "Question", "name": "Credit card statements?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Tick \"Credit card statement\" so purchases export as money out."}}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Will it work with my bank?", "acceptedAnswer": {"@type": "Answer", "text": "LedgerProof doesn't use per-bank templates. It finds the date and money columns by position, then picks the reading where your running balances add up. It has been tested on 400+ generated statement layouts, including US, UK, EU and AU styles. The free version is the quickest way to try your own statements."}}, {"@type": "Question", "name": "Is my data uploaded anywhere?", "acceptedAnswer": {"@type": "Answer", "text": "No. It runs on your computer and works offline after installation. Only if you turn on the Gemini AI reader are those specific files sent to Google, under your own key."}}, {"@type": "Question", "name": "What about scanned statements?", "acceptedAnswer": {"@type": "Answer", "text": "Statements downloaded from online banking convert offline with no AI. For scans, turn on the optional AI reader with your own free Google Gemini key or a local Ollama model. Its output goes through the same balance check."}}, {"@type": "Question", "name": "Do I need to be technical?", "acceptedAnswer": {"@type": "Answer", "text": "No. Double-click the installer, then the desktop icon. LedgerProof opens in your browser like a website, and a visual quickstart guide is included."}}, {"@type": "Question", "name": "Can I use it for my clients?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, on the computers you work on, for any number of clients. Please don't resell or redistribute the software."}}, {"@type": "Question", "name": "Credit card statements?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Tick \"Credit card statement\" so purchases export as money out."}}, {"@type": "Question", "name": "Is there a refund?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, within 30 days of buying the full version."}}]}</script>
 </head>
 <body class="bg-white text-slate-800 antialiased">
 
@@ -34,138 +34,114 @@
     <nav class="hidden md:flex gap-7 text-sm text-slate-600">
       <a href="#how" class="hover:text-slate-900">How it works</a>
       <a href="#proof" class="hover:text-slate-900">Verification</a>
-      <a href="#compare" class="hover:text-slate-900">Compare</a>
+      <a href="#safe" class="hover:text-slate-900">Is it safe?</a>
       <a href="#faq" class="hover:text-slate-900">FAQ</a>
       <a href="conversor-extractos-bancarios-pdf-excel.html" hreflang="es" class="hover:text-slate-900">Español</a>
     </nav>
-    <a href="https://ivanmoralesb.gumroad.com/l/ledgerproof" class="rounded-lg bg-green-600 hover:bg-green-700 text-white text-sm font-semibold px-4 py-2"><span class="hidden sm:inline">Get it – </span>$29</a>
+    <a href="https://vektorflow-labs.github.io/ledgerproof/download.html" class="rounded-lg bg-green-600 hover:bg-green-700 text-white text-sm font-semibold px-4 py-2">Free download</a>
   </div>
 </header>
 
 <main>
 <!-- HERO -->
-<section class="max-w-6xl mx-auto px-4 pt-14 pb-10 md:pt-20 text-center">
-  <p class="inline-flex items-center gap-2 rounded-full bg-green-50 text-green-800 text-xs font-semibold px-3 py-1 mb-6">✅ Every number checked against your bank's own balances</p>
-  <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight text-slate-900 leading-tight">PDF bank statements to Excel.<br class="hidden md:block"> <span class="text-green-600">Proven correct.</span></h1>
-  <p class="mt-6 text-lg md:text-xl text-slate-600 max-w-3xl mx-auto">Drop a year of statements from any mix of banks. Get one clean spreadsheet in seconds, plus a report that shows every running balance adds up to the cent. It runs on your computer. Pay once.</p>
+<section class="max-w-6xl mx-auto px-4 pt-12 pb-10 md:pt-20 text-center">
+  <p class="inline-flex items-center gap-2 rounded-full bg-green-50 text-green-800 text-xs font-semibold px-3 py-1 mb-6">For bookkeepers, accountants and small businesses</p>
+  <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight text-slate-900 leading-tight">Convert PDF bank statements to Excel, <span class="text-green-600">checked to the cent.</span></h1>
+  <p class="mt-6 text-lg md:text-xl text-slate-600 max-w-3xl mx-auto">Drop in your statements and get a spreadsheet where every row is checked against the balances your bank printed. It runs on your own computer, so your files are not uploaded.</p>
   <div class="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
     <a href="https://vektorflow-labs.github.io/ledgerproof/download.html" class="rounded-xl bg-green-600 hover:bg-green-700 text-white font-semibold px-7 py-4 text-lg shadow-lg shadow-green-600/20">Download the free version</a>
     <a href="https://ivanmoralesb.gumroad.com/l/ledgerproof" class="rounded-xl border border-slate-300 hover:border-slate-400 font-semibold px-7 py-4 text-lg">Full version: $29 once</a>
   </div>
-  <p class="mt-4 text-sm text-slate-500">No sign-up, no email &nbsp;·&nbsp; Windows · Mac · Linux &nbsp;·&nbsp; No subscription &nbsp;·&nbsp; 30-day refund</p>
-  <div class="mt-12 rounded-2xl border border-slate-200 shadow-2xl shadow-slate-900/10 overflow-hidden">
-    <img src="app_results_wide.png" alt="LedgerProof showing five statements from five banks, all verified" class="w-full" width="1440" height="900">
+  <p class="mt-4 text-sm text-slate-500">No sign-up, no email. Windows, Mac and Linux. Free version: 2 statements at a time, Excel and CSV.</p>
+  <div class="mt-10 rounded-2xl border border-slate-200 shadow-2xl shadow-slate-900/10 overflow-hidden">
+    <img src="app_results_wide.png" alt="LedgerProof showing five statements from five banks, all verified" class="w-full h-auto" width="1440" height="900">
   </div>
 </section>
 
-<!-- PAIN -->
-<section class="bg-slate-50 py-16">
-  <div class="max-w-6xl mx-auto px-4 grid md:grid-cols-3 gap-6">
-    <div class="bg-white rounded-2xl p-6 border border-slate-100"><p class="text-3xl mb-2">⌨️</p><h3 class="font-bold text-lg">Retyping takes hours</h3><p class="text-slate-600 mt-2">Old periods, closed accounts, banks with no CSV export, clients who email PDFs. Copy-paste breaks columns, and retyping by hand eats your evenings.</p></div>
-    <div class="bg-white rounded-2xl p-6 border border-slate-100"><p class="text-3xl mb-2">🤖</p><h3 class="font-bold text-lg">AI chatbots misread digits</h3><p class="text-slate-600 mt-2">They're fine for one page. Across 300 rows, one misread digit gets past you, and you only find it at reconciliation, or in an audit.</p></div>
-    <div class="bg-white rounded-2xl p-6 border border-slate-100"><p class="text-3xl mb-2">💸</p><h3 class="font-bold text-lg">Converters bill by the page</h3><p class="text-slate-600 mt-2">Online converters usually charge $20–40 every month, cap your pages and make you upload your clients' bank data to someone else's server.</p></div>
-  </div>
-</section>
-
-<!-- HOW -->
 <!-- DEMO -->
-<section class="max-w-5xl mx-auto px-4 py-16">
+<section class="max-w-5xl mx-auto px-4 py-14">
   <div class="grid md:grid-cols-2 gap-10 items-center">
     <div class="mx-auto w-64 md:w-72 rounded-3xl overflow-hidden border border-slate-200 shadow-2xl shadow-slate-900/10 bg-slate-900">
       <video src="demo-en.mp4" poster="demo-en.jpg" autoplay muted loop playsinline preload="metadata" width="540" height="960" class="w-full h-auto block" aria-label="See it in 30 seconds"></video>
     </div>
     <div>
       <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900">See it in 30 seconds</h2>
-      <ul class="mt-6 space-y-3 text-slate-700 text-lg"><li class="flex gap-3"><span class="text-green-600 font-bold">✓</span><span>Drop in PDF statements from any mix of banks.</span></li><li class="flex gap-3"><span class="text-green-600 font-bold">✓</span><span>Every row is checked against the running balance the bank printed.</span></li><li class="flex gap-3"><span class="text-green-600 font-bold">✓</span><span>Rows that don't add up are flagged, so nothing wrong slips into your books.</span></li></ul>
-      <a href="https://vektorflow-labs.github.io/ledgerproof/download.html" class="inline-block mt-8 rounded-xl bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-3">Try it free</a>
+      <ul class="mt-6 space-y-3 text-slate-700 text-lg"><li class="flex gap-3"><span class="text-green-600 font-bold">✓</span><span>Drop in PDF statements from any mix of banks.</span></li><li class="flex gap-3"><span class="text-green-600 font-bold">✓</span><span>Every row is checked against the running balance the bank printed.</span></li><li class="flex gap-3"><span class="text-green-600 font-bold">✓</span><span>Rows that don't add up are flagged before they reach your books.</span></li></ul>
+      <a href="https://vektorflow-labs.github.io/ledgerproof/download.html" class="inline-block mt-8 rounded-xl bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-3">Download free</a>
     </div>
   </div>
 </section>
 
-<section id="how" class="max-w-6xl mx-auto px-4 py-20">
-  <h2 class="text-3xl md:text-4xl font-extrabold text-center text-slate-900">Three steps. No setup skills needed.</h2>
-  <div class="mt-12 grid md:grid-cols-3 gap-8">
-    <div><div class="w-10 h-10 rounded-full bg-green-600 text-white font-bold grid place-items-center">1</div><h3 class="mt-4 font-bold text-lg">Double-click to install</h3><p class="text-slate-600 mt-2">Unzip, double-click <b>INSTALL</b>. Two minutes, one time. It even sets up Python for you if your computer doesn't have it.</p></div>
-    <div><div class="w-10 h-10 rounded-full bg-green-600 text-white font-bold grid place-items-center">2</div><h3 class="mt-4 font-bold text-lg">Drop your PDFs</h3><p class="text-slate-600 mt-2">As many statements as you want, any months, any banks: US, UK, EU or AU formats, newest-first lists, CR/DR columns, password-protected files.</p></div>
-    <div><div class="w-10 h-10 rounded-full bg-green-600 text-white font-bold grid place-items-center">3</div><h3 class="mt-4 font-bold text-lg">Download &amp; import</h3><p class="text-slate-600 mt-2">Excel, CSV, <b>QuickBooks Online</b>, <b>Xero</b>, <b>OFX</b> (Quicken, Wave, GnuCash…) or QIF. Overlapping statements are de-duplicated automatically.</p></div>
+<!-- HOW -->
+<section id="how" class="bg-slate-50 py-16">
+  <div class="max-w-6xl mx-auto px-4">
+    <h2 class="text-3xl md:text-4xl font-extrabold text-center text-slate-900">How it works</h2>
+    <div class="mt-10 grid md:grid-cols-3 gap-8">
+      <div><div class="w-10 h-10 rounded-full bg-green-600 text-white font-bold grid place-items-center">1</div><h3 class="mt-4 font-bold text-lg">Install</h3><p class="text-slate-600 mt-2">Unzip and double-click <b>INSTALL</b>. It takes about two minutes, once.</p></div>
+      <div><div class="w-10 h-10 rounded-full bg-green-600 text-white font-bold grid place-items-center">2</div><h3 class="mt-4 font-bold text-lg">Drop your PDFs</h3><p class="text-slate-600 mt-2">Add statements from any banks and months, including credit card statements. Overlapping statements are de-duplicated.</p></div>
+      <div><div class="w-10 h-10 rounded-full bg-green-600 text-white font-bold grid place-items-center">3</div><h3 class="mt-4 font-bold text-lg">Download and import</h3><p class="text-slate-600 mt-2">Export to Excel, CSV, QuickBooks Online, Xero, OFX or QIF.</p></div>
+    </div>
   </div>
 </section>
 
 <!-- PROOF -->
-<section id="proof" class="bg-slate-900 text-white py-20">
+<section id="proof" class="bg-slate-900 text-white py-16">
   <div class="max-w-6xl mx-auto px-4 grid md:grid-cols-2 gap-12 items-center">
     <div>
-      <p class="text-green-400 font-semibold text-sm uppercase tracking-wide">The part nobody else does</p>
-      <h2 class="text-3xl md:text-4xl font-extrabold mt-2">Your bank already printed the answer key.</h2>
-      <p class="mt-5 text-slate-300 text-lg">Every statement shows an opening balance, a closing balance and usually a running balance on every row. LedgerProof re-adds every transaction and checks it against those numbers.</p>
+      <h2 class="text-3xl md:text-4xl font-extrabold">Your bank already printed the answer key.</h2>
+      <p class="mt-5 text-slate-300 text-lg">Every statement shows an opening balance, a closing balance and usually a running balance on each row. LedgerProof re-adds every transaction and checks it against those numbers.</p>
       <ul class="mt-6 space-y-3 text-slate-200">
-        <li><b class="text-green-400">✅ Verified</b>: every row and the closing balance match to the cent.</li>
-        <li><b class="text-amber-400">⚠️ Check rows</b>: something doesn't add up, and the exact row is highlighted with the expected vs printed balance.</li>
-        <li><b class="text-slate-400">❔ No balances</b>: your bank prints none, so you're told the rows can't be proven.</li>
+        <li><b class="text-green-400">Verified:</b> every row and the closing balance match to the cent.</li>
+        <li><b class="text-amber-400">Check rows:</b> something doesn't add up, and the exact row is highlighted with the expected and printed balance.</li>
+        <li><b class="text-slate-400">No balances:</b> your bank prints none, so you're told the rows can't be proven.</li>
       </ul>
-      <p class="mt-6 text-slate-400 text-sm">The same check runs on the optional AI reader for scanned paper statements, so a misread digit shows up as a warning before it reaches your books.</p>
     </div>
-    <div class="rounded-2xl overflow-hidden border border-slate-700 shadow-2xl"><img src="app_downloads.png" alt="Verified transactions and export buttons" width="1440" height="900"></div>
+    <div class="rounded-2xl overflow-hidden border border-slate-700 shadow-2xl"><img src="app_downloads.png" alt="Verified transactions and export buttons" class="w-full h-auto" width="1440" height="900"></div>
   </div>
 </section>
 
-<!-- COMPARE -->
-<section id="compare" class="max-w-5xl mx-auto px-4 py-20">
-  <h2 class="text-3xl md:text-4xl font-extrabold text-center text-slate-900">How it compares</h2>
-  <div class="mt-10 overflow-x-auto">
-  <table class="w-full text-left text-sm md:text-base min-w-[560px]">
-    <thead><tr class="border-b-2 border-slate-200"><th class="py-3 pr-4"></th><th class="py-3 px-3 text-green-700">LedgerProof</th><th class="py-3 px-3">Online converters</th><th class="py-3 px-3">AI chatbots</th><th class="py-3 px-3">Retyping</th></tr></thead>
-    <tbody class="divide-y divide-slate-100">
-      <tr><td class="py-3 pr-4 font-medium">Price</td><td class="px-3 font-semibold">$29 once</td><td class="px-3">$20–40 / month</td><td class="px-3">Free–$20 / month</td><td class="px-3">Your hours</td></tr>
-      <tr><td class="py-3 pr-4 font-medium">Proves totals match</td><td class="px-3">✅ Every row</td><td class="px-3">Some</td><td class="px-3">❌</td><td class="px-3">Manual</td></tr>
-      <tr><td class="py-3 pr-4 font-medium">Data stays on your PC</td><td class="px-3">✅</td><td class="px-3">❌ Uploaded</td><td class="px-3">❌ Uploaded</td><td class="px-3">✅</td></tr>
-      <tr><td class="py-3 pr-4 font-medium">Page limits</td><td class="px-3">✅ None</td><td class="px-3">Monthly caps</td><td class="px-3">Context limits</td><td class="px-3">–</td></tr>
-      <tr><td class="py-3 pr-4 font-medium">Batch of many files</td><td class="px-3">✅</td><td class="px-3">Usually</td><td class="px-3">❌</td><td class="px-3">❌</td></tr>
-      <tr><td class="py-3 pr-4 font-medium">QuickBooks / Xero / OFX</td><td class="px-3">✅</td><td class="px-3">Usually</td><td class="px-3">❌</td><td class="px-3">❌</td></tr>
-    </tbody>
-  </table>
-  </div>
-</section>
-
-<!-- WHO -->
-<section class="bg-green-50 py-16">
-  <div class="max-w-6xl mx-auto px-4 grid md:grid-cols-3 gap-6 text-center">
-    <div><p class="font-bold text-lg">Bookkeepers &amp; accountants</p><p class="text-slate-600 mt-1">Catch-up work, new clients, year-end. Client data never leaves your machine.</p></div>
-    <div><p class="font-bold text-lg">Freelancers &amp; small businesses</p><p class="text-slate-600 mt-1">Get a year of statements into your accounting app or tax spreadsheet in minutes.</p></div>
-    <div><p class="font-bold text-lg">Loan, audit &amp; legal prep</p><p class="text-slate-600 mt-1">Turn statement stacks into sortable, totalled, verified data.</p></div>
+<!-- SAFE -->
+<section id="safe" class="max-w-5xl mx-auto px-4 py-16">
+  <h2 class="text-3xl md:text-4xl font-extrabold text-center text-slate-900">Is it safe?</h2>
+  <div class="mt-10 grid md:grid-cols-3 gap-6">
+    <div class="rounded-2xl border border-slate-200 p-6"><h3 class="font-bold text-lg">Stays on your computer</h3><p class="text-slate-600 mt-2">Statements never leave it unless you turn on the optional AI reader for scans.</p></div>
+    <div class="rounded-2xl border border-slate-200 p-6"><h3 class="font-bold text-lg">Not open to the network</h3><p class="text-slate-600 mt-2">The app listens only on your own machine (127.0.0.1), not on your network.</p></div>
+    <div class="rounded-2xl border border-slate-200 p-6"><h3 class="font-bold text-lg">Safe to open in Excel</h3><p class="text-slate-600 mt-2">Exports are protected against spreadsheet formula injection.</p></div>
   </div>
 </section>
 
 <!-- PRICING -->
-<section id="buy" class="max-w-3xl mx-auto px-4 py-20 text-center">
-  <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900">One price. Yours forever.</h2>
-  <div class="mt-10 rounded-3xl border-2 border-green-600 p-8 md:p-10 shadow-xl shadow-green-600/10">
-    <p class="text-6xl font-extrabold text-slate-900">$29</p><p class="text-slate-500 mt-1">one-time · no subscription</p>
-    <ul class="mt-8 space-y-2 text-left max-w-md mx-auto text-slate-700">
-      <li>✅ Unlimited statements, pages and banks</li>
-      <li>✅ Balance verification report on every file</li>
-      <li>✅ Excel, CSV, QuickBooks, Xero, OFX, QIF</li>
-      <li>✅ Windows, Mac and Linux · works offline</li>
-      <li>✅ Optional AI reader for scans (your own free key)</li>
-      <li>✅ Free v1.x updates · 30-day refund guarantee</li>
-    </ul>
-    <a href="https://ivanmoralesb.gumroad.com/l/ledgerproof" class="mt-8 inline-block rounded-xl bg-green-600 hover:bg-green-700 text-white font-semibold px-8 py-4 text-lg">Get LedgerProof</a>
-    <p class="mt-3 text-xs text-slate-500">Secure checkout by Gumroad. Instant download.</p>
-    <p class="mt-6 text-sm text-slate-600">Not sure yet? <a class="underline font-semibold text-green-700" href="https://vektorflow-labs.github.io/ledgerproof/download.html">Download LedgerProof Lite for free</a>: 2 statements at a time, the same verification, Excel and CSV.</p>
+<section id="buy" class="bg-green-50 py-16">
+  <div class="max-w-3xl mx-auto px-4 text-center">
+    <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900">Start free. Pay once if you need more.</h2>
+    <div class="mt-10 grid sm:grid-cols-2 gap-6 text-left">
+      <div class="rounded-3xl bg-white border border-slate-200 p-7">
+        <p class="font-bold text-lg">Lite</p><p class="text-4xl font-extrabold text-slate-900 mt-1">Free</p>
+        <ul class="mt-5 space-y-2 text-slate-700"><li>2 statements at a time</li><li>Excel and CSV</li><li>The same balance check</li><li>No sign-up, no email</li></ul>
+        <a href="https://vektorflow-labs.github.io/ledgerproof/download.html" class="mt-6 block text-center rounded-xl bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-3">Download the free version</a>
+      </div>
+      <div class="rounded-3xl bg-white border-2 border-green-600 p-7 shadow-xl shadow-green-600/10">
+        <p class="font-bold text-lg">Full</p><p class="text-4xl font-extrabold text-slate-900 mt-1">$29 <span class="text-base font-normal text-slate-500">one payment</span></p>
+        <ul class="mt-5 space-y-2 text-slate-700"><li>No subscription, no page limits</li><li>Excel, CSV, QuickBooks, Xero, OFX, QIF</li><li>Optional AI reader for scans, with your own free Gemini key or a local Ollama model</li></ul>
+        <a href="https://ivanmoralesb.gumroad.com/l/ledgerproof" class="mt-6 block text-center rounded-xl border border-slate-300 hover:border-slate-400 font-semibold px-6 py-3">Get the full version</a>
+      </div>
+    </div>
+    <p class="mt-4 text-xs text-slate-500">Secure checkout by Gumroad. Instant download.</p>
   </div>
 </section>
 
 <!-- FAQ -->
-<section id="faq" class="bg-slate-50 py-20">
+<section id="faq" class="bg-slate-50 py-16">
   <div class="max-w-3xl mx-auto px-4">
     <h2 class="text-3xl md:text-4xl font-extrabold text-center text-slate-900">Questions</h2>
     <div class="mt-10 space-y-3">
-      <details class="bg-white rounded-xl p-5 border border-slate-100"><summary class="font-semibold cursor-pointer">Will it work with my bank?</summary><p class="mt-3 text-slate-600">LedgerProof doesn't use per-bank templates. It finds the date and money columns from their positions, then picks the interpretation where your running balances add up. It's stress-tested on 400+ generated statement layouts (US, UK, EU and AU styles, debit/credit or signed columns, CR/DR markers, newest-first lists, wrapped descriptions, multi-page). If one of your statements doesn't convert, you get a refund within 30 days.</p></details>
-      <details class="bg-white rounded-xl p-5 border border-slate-100"><summary class="font-semibold cursor-pointer">What about scanned or photographed statements?</summary><p class="mt-3 text-slate-600">Statements downloaded from online banking are converted offline with no AI. For scans, turn on the optional AI reader with your own free Google Gemini key (1 minute to create) or a local Ollama model. Its output goes through the same balance check.</p></details>
-      <details class="bg-white rounded-xl p-5 border border-slate-100"><summary class="font-semibold cursor-pointer">Is my data uploaded anywhere?</summary><p class="mt-3 text-slate-600">No. LedgerProof runs on your computer and works offline after installation. It sends no usage statistics. Only if you choose the Gemini AI reader are those specific files sent to Google under your own key.</p></details>
-      <details class="bg-white rounded-xl p-5 border border-slate-100"><summary class="font-semibold cursor-pointer">Do I need to be technical?</summary><p class="mt-3 text-slate-600">No. Double-click the installer, then the desktop icon. LedgerProof opens in your browser like a website. A visual quickstart guide is included.</p></details>
-      <details class="bg-white rounded-xl p-5 border border-slate-100"><summary class="font-semibold cursor-pointer">Can I use it for my clients?</summary><p class="mt-3 text-slate-600">Yes. Use it on the computers you work on for any number of clients. Just don't resell or redistribute the software itself.</p></details>
+      <details class="bg-white rounded-xl p-5 border border-slate-100"><summary class="font-semibold cursor-pointer">Will it work with my bank?</summary><p class="mt-3 text-slate-600">LedgerProof doesn't use per-bank templates. It finds the date and money columns by position, then picks the reading where your running balances add up. It has been tested on 400+ generated statement layouts, including US, UK, EU and AU styles. The free version is the quickest way to try your own statements.</p></details>
+      <details class="bg-white rounded-xl p-5 border border-slate-100"><summary class="font-semibold cursor-pointer">Is my data uploaded anywhere?</summary><p class="mt-3 text-slate-600">No. It runs on your computer and works offline after installation. Only if you turn on the Gemini AI reader are those specific files sent to Google, under your own key.</p></details>
+      <details class="bg-white rounded-xl p-5 border border-slate-100"><summary class="font-semibold cursor-pointer">What about scanned statements?</summary><p class="mt-3 text-slate-600">Statements downloaded from online banking convert offline with no AI. For scans, turn on the optional AI reader with your own free Google Gemini key or a local Ollama model. Its output goes through the same balance check.</p></details>
+      <details class="bg-white rounded-xl p-5 border border-slate-100"><summary class="font-semibold cursor-pointer">Do I need to be technical?</summary><p class="mt-3 text-slate-600">No. Double-click the installer, then the desktop icon. LedgerProof opens in your browser like a website, and a visual quickstart guide is included.</p></details>
+      <details class="bg-white rounded-xl p-5 border border-slate-100"><summary class="font-semibold cursor-pointer">Can I use it for my clients?</summary><p class="mt-3 text-slate-600">Yes, on the computers you work on, for any number of clients. Please don't resell or redistribute the software.</p></details>
       <details class="bg-white rounded-xl p-5 border border-slate-100"><summary class="font-semibold cursor-pointer">Credit card statements?</summary><p class="mt-3 text-slate-600">Yes. Tick "Credit card statement" so purchases export as money out.</p></details>
+      <details class="bg-white rounded-xl p-5 border border-slate-100"><summary class="font-semibold cursor-pointer">Is there a refund?</summary><p class="mt-3 text-slate-600">Yes, within 30 days of buying the full version.</p></details>
     </div>
   </div>
 </section>

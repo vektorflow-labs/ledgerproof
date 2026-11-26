@@ -34,7 +34,7 @@
       var one = lines[0]; lines = [];
       for (var i = 0; i < one.length; i += 80) lines.push(one.slice(i, i + 80));
     }
-    return lines.map(function (l) { l = l.replace(/\s+$/, ""); while (l.length < 80) l += " "; return l; });
+    return lines.map(function (l) { l = l.trimEnd(); while (l.length < 80) l += " "; return l; });
   }
 
   function looksLikeN43(text) {
@@ -191,7 +191,7 @@
   };
   var $ = function (id) { return document.getElementById(id); };
   var result = null;
-  function money(v) { return typeof v === "number" ? v.toLocaleString(ES ? "es-ES" : "en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2, useGrouping: "always" }) : v; }
+  function money(v) { return typeof v === "number" ? v.toLocaleString(ES ? "es-ES" : "en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2, useGrouping: "always" }) : esc(v); }
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
   function pad(n) { return (n < 10 ? "0" : "") + n; }
   function mask(id) { return id.replace(/^(.*)(\d{4})$/, function (_, a, b) { return a.replace(/\d/g, "•") + b; }); }

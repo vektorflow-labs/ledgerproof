@@ -49,7 +49,7 @@
 
   function parseOFX(text) {
     var stmts = [], re = /<(CC)?STMTRS>([\s\S]*?)(<\/(CC)?STMTRS>|(?=<(CC)?STMTRS>)|$)/gi, m;
-    while ((m = re.exec(text)) !== null) { stmts.push({ cc: !!m[1], body: m[2] }); if (!m[2]) break; }
+    while ((m = re.exec(text)) !== null) { if (m[2]) stmts.push({ cc: !!m[1], body: m[2] }); if (!m[0]) break; }
     if (!stmts.length) stmts.push({ cc: false, body: text });
     var tx = [], accounts = [], bad = 0;
     stmts.forEach(function (st, si) {
@@ -110,7 +110,7 @@
   function parseQIF(text, dateFmt) {
     var recs = [], cur = {}, account = "", type = "Bank";
     text.split(/\r?\n/).forEach(function (raw) {
-      var l = raw.replace(/\s+$/, "");
+      var l = raw.trimEnd();
       if (!l) return;
       if (l.charAt(0) === "!") {
         var mt = /^!Type:(\w+)/i.exec(l); if (mt) type = mt[1];
@@ -169,7 +169,10 @@
     };
   }
 
-  function csvCell(s, d) { s = String(s); return (s.indexOf(d) > -1 || /["\n\r]/.test(s)) ? '"' + s.replace(/"/g, '""') + '"' : s; }
+  function csvCell(s, d) {
+    s = String(s);
+    if (/^[=+\-@\t\r]/.test(s) && !/^[+-]?\d[\d.,]*$/.test(s)) s = "'" + s;  // no spreadsheet formulas from file text
+    return (s.indexOf(d) > -1 || /["\n\r]/.test(s)) ? '"' + s.replace(/"/g, '""') + '"' : s; }
 
   /* Plain CSV for Excel/Sheets. delimiter ";" + decimal "," for Spanish/European Excel. */
   function toCSV(tx, delimiter, decimalComma, labels) {
@@ -273,7 +276,7 @@
     return out;
   }
   function xmlEsc(s) {
-    return String(s).replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g, "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+    return String(s).replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\uFFFE\uFFFF]/g, "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
   }
   function colName(i) { var s = ""; i++; while (i) { var r = (i - 1) % 26; s = String.fromCharCode(65 + r) + s; i = (i - r - 1) / 26; } return s; }
   function serial(t) { return (Date.UTC(t.y, t.m - 1, t.d) - Date.UTC(1899, 11, 30)) / 86400000; }

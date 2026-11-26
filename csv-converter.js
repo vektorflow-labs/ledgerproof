@@ -35,10 +35,11 @@
   function parseCSV(text, d) {
     text = text.replace(/^﻿/, "");
     // join quoted fields that contain line breaks
-    var rows = [], buf = "";
+    var rows = [], buf = "", quotes = 0;
     text.split(/\r?\n/).forEach(function (l) {
       buf = buf ? buf + "\n" + l : l;
-      if ((buf.match(/"/g) || []).length % 2 === 0) { if (buf.trim()) rows.push(splitLine(buf, d)); buf = ""; }
+      quotes += (l.match(/"/g) || []).length;   // count each line once: linear time
+      if (quotes % 2 === 0) { if (buf.trim()) rows.push(splitLine(buf, d)); buf = ""; quotes = 0; }
     });
     if (buf.trim()) rows.push(splitLine(buf, d));
     return rows;
@@ -179,7 +180,10 @@
     return ("0000000" + h1.toString(16)).slice(-8) + ("0000000" + h2.toString(16)).slice(-8);
   }
 
-  function csvCell(s) { s = String(s); return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; }
+  function csvCell(s) {
+    s = String(s);
+    if (/^[=+\-@\t\r]/.test(s) && !/^[+-]?\d[\d.,]*$/.test(s)) s = "'" + s;  // no spreadsheet formulas from file text
+    return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; }
 
   function toQuickBooks(tx) {
     return "Date,Description,Amount\r\n" + tx.map(function (t) {
