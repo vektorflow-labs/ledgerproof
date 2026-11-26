@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Extracto de tarjeta de crédito PDF a Excel: cómo pasarlo y comprobar el saldo</title>
+<meta name="description" content="Cómo pasar el extracto, resumen o estado de cuenta de tu tarjeta de crédito en PDF a Excel: corregir los signos, leer importes como 1.234,56, tratar cuotas y compras en dólares, y comprobar que saldo anterior + consumos − pagos da el saldo nuevo.">
+<link rel="canonical" href="https://vektorflow-labs.github.io/ledgerproof/extracto-tarjeta-credito-pdf-a-excel.html">
+<link rel="alternate" hreflang="es" href="https://vektorflow-labs.github.io/ledgerproof/extracto-tarjeta-credito-pdf-a-excel.html">
+<link rel="alternate" hreflang="en" href="https://vektorflow-labs.github.io/ledgerproof/credit-card-statement-pdf-to-excel.html">
+<link rel="icon" href="icon.png"><link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-white text-slate-800 antialiased">
+<header class="border-b border-slate-100"><div class="max-w-3xl mx-auto px-4 h-14 flex items-center justify-between">
+<a href="conversor-extractos-bancarios-pdf-excel.html" class="flex items-center gap-2 font-bold"><img src="icon.png" alt="" class="w-7 h-7 rounded-md">LedgerProof</a>
+<a href="https://vektorflow-labs.github.io/ledgerproof/descargar.html" class="text-sm font-semibold text-green-700">Descarga gratis →</a></div></header>
+<main class="max-w-3xl mx-auto px-4 py-12">
+<p class="text-sm text-slate-500">Guía · 6 min de lectura</p>
+<h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 mt-2 leading-tight">Extracto de tarjeta de crédito en PDF a Excel: cómo pasarlo y comprobar el saldo</h1>
+<p class="mt-5 text-lg text-slate-600">En España se llama extracto, en Argentina y Uruguay resumen, en México estado de cuenta. Sea cual sea el nombre, el de la tarjeta de crédito cuesta más de pasar a Excel que el de una cuenta: separa compras, pagos e intereses en bloques distintos, imprime los consumos sin signo y casi nunca muestra un saldo después de cada línea. Esta guía lo deja en una tabla limpia y termina con un control que demuestra que no falta nada.</p>
+
+<h2 class="text-2xl font-bold mt-10">Antes de empezar: ¿puedes bajar un Excel o CSV?</h2>
+<p class="mt-3">Muchos bancos dejan descargar los últimos movimientos de la tarjeta en Excel o CSV desde la banca en línea, en "Movimientos", "Consumos" o "Últimos movimientos". Si el período que necesitas todavía está ahí, usa ese archivo. El PDF es para meses viejos, tarjetas dadas de baja o extractos que te mandó un cliente.</p>
+
+<h2 class="text-2xl font-bold mt-10">1. Sacar las filas del PDF</h2>
+<ul class="list-disc pl-6 mt-3 space-y-2">
+<li><b>Excel (Microsoft 365, Windows):</b> <i>Datos → Obtener datos → Desde un archivo → Desde PDF</i>. Elige la tabla de movimientos de cada página y únelas con <i>Anexar consultas</i>. En las tarjetas suele haber una tabla para pagos y otra para consumos: anexa las dos.</li>
+<li><b>Tabula</b> (gratis, Windows, Mac y Linux): dibuja un recuadro sobre la zona de movimientos de cada página y exporta a CSV.</li>
+<li><b>Copiar y pegar</b> sirve para un extracto corto, seguido de <i>Datos → Texto en columnas</i>. Vas a tener que arreglar los conceptos a mano.</li>
+</ul>
+<p class="mt-3">Ninguno de estos métodos lee extractos escaneados en papel. Para eso hace falta OCR, y los errores de OCR en los importes son justo lo que detecta el control del paso 5.</p>
+
+<h2 class="text-2xl font-bold mt-10">2. Que Excel entienda los importes</h2>
+<p class="mt-3">Si el PDF trae importes como <code>1.234,56</code> y tu Excel está configurado con punto decimal (o al revés), los números quedan como texto y las sumas dan cero. Con el texto en <code>A2</code>:</p>
+<pre class="mt-3 bg-slate-900 text-green-300 rounded-xl p-4 overflow-x-auto text-sm">=VALOR.NUMERO(A2;",";".")</pre>
+<p class="mt-3">El segundo argumento es el separador decimal del PDF y el tercero el de miles. Si tu Excel usa coma para separar argumentos en lugar de punto y coma, escribe <code>=VALOR.NUMERO(A2,",",".")</code>.</p>
+
+<h2 class="text-2xl font-bold mt-10">3. Arreglar los signos</h2>
+<p class="mt-3">En el extracto de una cuenta, lo que sale va en negativo. En el de una tarjeta, una compra suele aparecer como número positivo porque aumenta lo que debes, y los pagos o devoluciones llevan signo menos o una marca como <code>CR</code> o <code>-</code> al final. Decide qué vista quieres antes de seguir:</p>
+<ul class="list-disc pl-6 mt-3 space-y-1">
+<li><b>Vista "lo que debo"</b> (igual que el extracto): consumos, intereses y comisiones en positivo; pagos y devoluciones en negativo. Es la que usa el control del paso 5.</li>
+<li><b>Vista "lo que gasté"</b> (la que esperan los programas contables y de presupuesto): consumos en negativo, pagos en positivo. Multiplica la columna por −1: escribe <code>-1</code> en una celda libre, cópiala, selecciona los importes y usa <i>Pegado especial → Multiplicar</i>.</li>
+</ul>
+<p class="mt-3">Para convertir los importes con <code>CR</code> en números con signo (vista "lo que debo"), con el texto en <code>A2</code> e importes con punto decimal:</p>
+<pre class="mt-3 bg-slate-900 text-green-300 rounded-xl p-4 overflow-x-auto text-sm">=SI(DERECHA(ESPACIOS(A2);2)="CR";-VALOR(SUSTITUIR(A2;"CR";""));VALOR(A2))</pre>
+
+<h2 class="text-2xl font-bold mt-10">4. Cuotas y compras en otra moneda</h2>
+<ul class="list-disc pl-6 mt-3 space-y-2">
+<li><b>Compras en cuotas.</b> Un consumo como "TIENDA X CUOTA 03/12" entra al extracto solo por el importe de esa cuota, no por el total de la compra. Para el control usa el importe que figura en la columna del período. Si quieres seguir el plan de cuotas, separa el "03/12" en dos columnas (cuota actual y total) con <i>Texto en columnas</i> usando la barra como separador.</li>
+<li><b>Extractos en dos monedas.</b> Muchos resúmenes de América Latina traen una columna en moneda local y otra en dólares, cada una con su propio saldo. No las sumes juntas: haz una columna de importe por moneda y repite el control del paso 5 para cada una.</li>
+<li><b>Compras en el exterior con tipo de cambio.</b> A veces la misma línea muestra el importe original y el convertido. Quédate con el que suma al saldo de esa moneda; el otro va a una columna aparte, como referencia.</li>
+</ul>
+
+<h2 class="text-2xl font-bold mt-10">5. El control: saldo anterior a saldo nuevo</h2>
+<p class="mt-3">El recuadro de resumen al principio del extracto tiene todo lo que necesitas: saldo anterior, pagos, consumos, intereses y saldo actual. En la vista "lo que debo", con los importes con signo en la columna C:</p>
+<pre class="mt-3 bg-slate-900 text-green-300 rounded-xl p-4 overflow-x-auto text-sm">=saldo_anterior + SUMA(C:C) - saldo_nuevo    → tiene que dar 0,00</pre>
+<p class="mt-3">Si no da cero, compara por bloques. La mayoría de los extractos imprime un subtotal de pagos, de consumos y de intereses y comisiones. Agrega una columna D con el tipo de cada fila y suma lo mismo en tu hoja con <code>=SUMAR.SI(D:D;"Consumo";C:C)</code>: el bloque que no coincide es donde falta, sobra o se leyó mal una fila. Los sospechosos habituales:</p>
+<ul class="list-disc pl-6 mt-3 space-y-1">
+<li>Intereses, comisiones e impuestos impresos en un recuadro aparte que la extracción no tomó.</li>
+<li>Una compra en el exterior donde el importe original y el convertido quedaron los dos en la columna de importe.</li>
+<li>Un pago cuya marca <code>CR</code> quedó pegada al concepto, así que se contó como consumo.</li>
+<li>Una fila partida entre dos páginas.</li>
+</ul>
+
+<h2 class="text-2xl font-bold mt-10">6. Fechas</h2>
+<p class="mt-3">Los extractos de tarjeta suelen traer dos fechas por línea: la de la compra y la de registro (o de liquidación). Quédate con una y asegúrate de que Excel la lea como fecha. Muchos imprimen la fecha sin año, como <code>14/03</code> o <code>14-MAR</code>: agrégale el año del período del extracto, y ojo con el extracto de enero que incluye compras de diciembre, o al revés.</p>
+
+<h2 class="text-2xl font-bold mt-10">¿Tienes un año entero de extractos?</h2>
+<p class="mt-3"><b>LedgerProof</b> convierte extractos en PDF a Excel y CSV (y en la versión completa también a QuickBooks, Xero, OFX y QIF) en tu propia computadora, sin subirlos a ningún servidor. Tiene una opción para tarjetas de crédito que invierte los signos para que los consumos salgan como gasto, compara el resultado con los saldos impresos en el extracto y marca las filas que no cuadran. Entiende importes como 1.234,56 y la interfaz está en español.</p>
+<p class="mt-3 text-sm text-slate-500">Los diseños de las tarjetas cambian más que los de las cuentas, y los extractos en dos monedas varían mucho de un banco a otro: pruébalo gratis con los tuyos antes de pagar.</p>
+<div class="mt-8 rounded-2xl border-2 border-green-600 p-6 text-center">
+<p class="font-bold text-lg">Pruébalo gratis con tus extractos</p>
+<p class="text-slate-600 mt-1">La edición Lite convierte 2 extractos por vez a Excel y CSV, con la misma comprobación de saldos. Sin registro ni correo.</p>
+<a href="https://vektorflow-labs.github.io/ledgerproof/descargar.html" class="inline-block mt-4 rounded-xl bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-3">Descargar LedgerProof Lite</a>
+<p class="mt-3 text-sm text-slate-600">Versión completa: USD 29, un solo pago. <a class="underline" href="conversor-extractos-bancarios-pdf-excel.html">Ver detalles</a></p></div>
+<p class="mt-10 text-sm text-slate-500">También: <a class="underline" href="convertir-extracto-bancario-pdf-a-excel.html">Convertir un extracto bancario PDF a Excel</a> · <a class="underline" href="resumen-gastos-por-categoria-extracto-bancario-excel.html">Resumen de gastos por categoría</a> · <a class="underline" href="plantilla-conciliacion-bancaria-excel.html">Plantilla de conciliación bancaria (gratis)</a> · <a class="underline" href="credit-card-statement-pdf-to-excel.html" hreflang="en">In English</a></p>
+</main>
+<footer class="py-10 text-center text-sm text-slate-500">© VektorFlow Labs · LedgerProof</footer>
+</body></html>
