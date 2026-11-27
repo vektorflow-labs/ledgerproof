@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bank Statements to CSV for Taxes: One Year in One Checked File</title>
+<meta name="description" content="How to turn a year of PDF bank statements into one CSV or Excel file for your tax return or your accountant, with categories, no duplicate rows and a check that every month adds up.">
+<link rel="canonical" href="https://vektorflow-labs.github.io/ledgerproof/bank-statements-to-csv-for-taxes.html">
+<link rel="icon" href="icon.png"><link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-white text-slate-800 antialiased">
+<header class="border-b border-slate-100"><div class="max-w-3xl mx-auto px-4 h-14 flex items-center justify-between">
+<a href="index.html" class="flex items-center gap-2 font-bold"><img src="icon.png" alt="" class="w-7 h-7 rounded-md">LedgerProof</a>
+<a href="index.html#buy" class="text-sm font-semibold text-green-700">Get LedgerProof →</a></div></header>
+<main class="max-w-3xl mx-auto px-4 py-12">
+<p class="text-sm text-slate-500">Guide · 5 min read</p>
+<h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 mt-2 leading-tight">Bank statements to CSV for taxes: one year in one checked file</h1>
+<p class="mt-5 text-lg text-slate-600">At tax time you usually need the same thing: every transaction for the year, in one spreadsheet, with a category next to each line. Your accountant asks for it, your tax software can import it, and you want to be sure nothing is missing. Here's a way to build that file from twelve PDF statements without retyping anything.</p>
+
+<h2 class="text-2xl font-bold mt-10">1. Collect the right statements</h2>
+<p class="mt-3">Download every monthly statement that touches the tax year, plus one on each side. A statement dated January 3 often covers mid December, and the January statement of the next year can hold late December rows. You'll trim the extra rows at the end, by date.</p>
+<p class="mt-3">If your bank still offers a CSV download for the whole year, take it and skip to step 3. Most banks only keep 90 days to 18 months of downloadable activity, so for older periods the PDF is what you have.</p>
+
+<h2 class="text-2xl font-bold mt-10">2. Get the rows out of each PDF</h2>
+<ul class="list-disc pl-6 mt-3 space-y-1">
+<li><b>Excel (Microsoft 365, Windows):</b> <i>Data → Get Data → From File → From PDF</i>, pick the transaction table, and repeat per file. Use <i>Append Queries</i> to stack the months.</li>
+<li><b>Tabula</b> (free): draw the table area once per layout and export each statement to CSV.</li>
+<li><b>A converter:</b> faster for twelve files, but check its output the same way as below. A tool that reads a 6 as an 8 still gives you a tidy spreadsheet.</li>
+</ul>
+
+<h2 class="text-2xl font-bold mt-10">3. Use one simple layout</h2>
+<p class="mt-3">Keep five columns and nothing else. Tax software and accountants both handle this shape well:</p>
+<pre class="mt-3 bg-slate-900 text-green-300 rounded-xl p-4 overflow-x-auto text-sm">Date        Description                 Amount    Balance    Category
+2025-01-03  CARD 4411 OFFICE SUPPLY      -84.20   3,912.55   Office
+2025-01-05  TRANSFER FROM CLIENT A     1,500.00   5,412.55   Income</pre>
+<p class="mt-3">Two rules make the file safe to import:</p>
+<ul class="list-disc pl-6 mt-3 space-y-1">
+<li><b>One signed amount column.</b> Money in positive, money out negative. If the PDF has separate debit and credit columns, use <code>=C2-B2</code> (credit minus debit) and keep only the result.</li>
+<li><b>Dates as ISO text</b> (<code>2025-01-03</code>) when you save to CSV. A file that says <code>03/01/2025</code> means March to one program and January to another. In Excel, format the column as <code>yyyy-mm-dd</code> before you save.</li>
+</ul>
+
+<h2 class="text-2xl font-bold mt-10">4. Check every month before you categorize</h2>
+<p class="mt-3">Categorizing a file with a missing row means doing it twice. Each statement prints an opening and a closing balance, so check each month on its own. With the month's amounts in column C:</p>
+<pre class="mt-3 bg-slate-900 text-green-300 rounded-xl p-4 overflow-x-auto text-sm">= opening_balance + SUM(C2:C40) - closing_balance     → should be 0.00</pre>
+<p class="mt-3">If the statement prints a running balance on each line, you can go further and check every row: <code>=ROUND(D2+C3-D3,2)</code> next to row 3, filled down, should be zero all the way. The first non-zero line is where a row was dropped, doubled or misread. The <a class="underline" href="free-bank-reconciliation-template-excel.html">free reconciliation template</a> has this check built in.</p>
+
+<h2 class="text-2xl font-bold mt-10">5. Remove the overlap</h2>
+<p class="mt-3">Statements that share days at the edges give you duplicate rows when you stack them. Don't use <i>Remove Duplicates</i> on date and amount alone: two real coffee purchases of 4.50 on the same day would be merged. Compare date, description, amount and running balance together. Two genuine rows almost never share the same balance after them; a duplicate always does.</p>
+<p class="mt-3">Then filter to the tax year (<code>Date &gt;= 2025-01-01</code> and <code>&lt;= 2025-12-31</code>) and delete the rest.</p>
+
+<h2 class="text-2xl font-bold mt-10">6. Add categories</h2>
+<p class="mt-3">Add a Category column and fill it with whatever your accountant or tax form uses. A small rules table saves most of the work: put keywords in one column (<code>OFFICE</code>, <code>UBER</code>, <code>RENT</code>) and categories in the next, then use <code>SEARCH</code> inside <code>IFERROR</code> or <code>XLOOKUP</code> with wildcards to fill matches. What's left you categorize by hand. Which categories matter, and what counts as deductible, depends on where you file. Your accountant decides that part; the file just has to be complete and correct.</p>
+<p class="mt-3">A pivot table by Category and month gives you the totals most people actually send. Keep the full row list as a second sheet in case someone asks about a single line.</p>
+
+<h2 class="text-2xl font-bold mt-10">7. Save the CSV</h2>
+<p class="mt-3"><i>File → Save As → CSV UTF-8</i>. UTF-8 keeps accented names in descriptions readable. Open the CSV in a text editor once to confirm the amounts use a dot for decimals and no thousands separators, which is what most importers expect.</p>
+
+<h2 class="text-2xl font-bold mt-10">Twelve statements, or sixty?</h2>
+<p class="mt-3"><b>LedgerProof</b> does steps 2 to 5 on your own computer: you drop in all the PDF statements at once, it merges them, removes overlapping rows, and checks every row against the balances printed on the statement, flagging any line that doesn't add up. It exports Excel and CSV, and the full version also exports QuickBooks, Xero, OFX and QIF. It doesn't categorize for you or give tax advice. Statement layouts vary, so run the free version on your own statements before you rely on it.</p>
+<div class="mt-8 rounded-2xl border-2 border-green-600 p-6 text-center">
+<p class="font-bold text-lg">Try it free first</p>
+<p class="text-slate-600 mt-1">The Lite edition converts 2 statements at a time to Excel and CSV, with the same balance check.</p>
+<a href="https://vektorflow-labs.github.io/ledgerproof/download.html" class="inline-block mt-4 rounded-xl bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-3">Download LedgerProof Lite</a>
+<p class="mt-3 text-sm text-slate-600">Or <a class="underline" href="index.html">get the full version</a> ($29 once).</p></div>
+<p class="mt-10 text-sm text-slate-500">Also read: <a class="underline" href="pdf-bank-statement-to-excel.html">PDF bank statement to Excel</a> · <a class="underline" href="reconcile-bank-statement-in-excel.html">Reconcile a bank statement in Excel</a> · <a class="underline" href="credit-card-statement-pdf-to-excel.html">Credit card statements</a></p>
+</main>
+<footer class="py-10 text-center text-sm text-slate-500">© VektorFlow Labs · LedgerProof</footer>
+</body></html>
